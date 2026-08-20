@@ -10,6 +10,8 @@ interface BaseSession {
   durationMinutes?: number
   startedAt: string | null
   closedAt: string | null
+  pausedAt: string | null
+  totalPausedSeconds: number
   createdAt: string
 }
 
@@ -51,6 +53,17 @@ export interface CloseSessionInput {
   cashOutCents: number
 }
 
+export type SessionActivityType = 'buy_in' | 'pause' | 'resume'
+
+export interface SessionActivityEntry {
+  id: string
+  sessionId: string
+  userId: string | null
+  type: SessionActivityType
+  amountCents: number | null
+  createdAt: string
+}
+
 /** Thrown by the app-level pre-check and the DB unique-index fallback alike. */
 export class DuplicateOpenSessionError extends Error {
   constructor() {
@@ -67,5 +80,8 @@ export interface DataAdapter {
   addBuyIn(id: string, amountCents: number): Promise<OpenSession>
   closeSession(id: string, input: CloseSessionInput): Promise<ClosedSession>
   logCompletedSession(input: LogCompletedSessionInput): Promise<ClosedSession>
+  pauseSession(id: string): Promise<OpenSession>
+  resumeSession(id: string): Promise<OpenSession>
+  listActivity(sessionId: string): Promise<SessionActivityEntry[]>
   deleteSession(id: string): Promise<void>
 }

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
 import { Money } from '@/components/ui/Mono'
 import { ActiveSessionBanner } from '@/features/sessions/components/ActiveSessionBanner'
@@ -19,17 +20,9 @@ import {
 } from './stats'
 
 export function DashboardPage() {
-  const {
-    openSession,
-    closedSessions,
-    loading,
-    error,
-    startSession,
-    addBuyIn,
-    closeSession,
-    logCompletedSession,
-    deleteSession,
-  } = useSessions()
+  const { openSession, closedSessions, loading, error, startSession, logCompletedSession, deleteSession } =
+    useSessions()
+  const navigate = useNavigate()
   const [locationFilter, setLocationFilter] = useState<string | null>(null)
 
   const locationRows = useMemo(() => breakdownByLocation(closedSessions), [closedSessions])
@@ -57,13 +50,8 @@ export function DashboardPage() {
       <ActiveSessionBanner
         session={openSession}
         onStart={async (input) => {
-          await startSession(input)
-        }}
-        onAddBuyIn={async (id, amountCents) => {
-          await addBuyIn(id, amountCents)
-        }}
-        onCloseSession={async (id, input) => {
-          await closeSession(id, input)
+          const session = await startSession(input)
+          navigate(`/app/session/${session.id}`)
         }}
       />
 

@@ -7,6 +7,7 @@ import {
   type LogCompletedSessionInput,
   type OpenSession,
   type Session,
+  type SessionActivityEntry,
   type StartSessionInput,
 } from './types'
 
@@ -21,6 +22,17 @@ interface SessionRow {
   status: 'open' | 'closed'
   started_at: string | null
   closed_at: string | null
+  paused_at: string | null
+  total_paused_seconds: number
+  created_at: string
+}
+
+interface SessionActivityRow {
+  id: string
+  session_id: string
+  user_id: string | null
+  type: 'buy_in' | 'pause' | 'resume'
+  amount_cents: number | null
   created_at: string
 }
 
@@ -34,6 +46,8 @@ function fromRow(row: SessionRow): Session {
     locationLabel: row.location_label ?? undefined,
     startedAt: row.started_at,
     closedAt: row.closed_at,
+    pausedAt: row.paused_at,
+    totalPausedSeconds: row.total_paused_seconds,
     createdAt: row.created_at,
   }
   if (row.status === 'open') {
@@ -101,25 +115,41 @@ export class SupabaseAdapter implements DataAdapter {
   }
 
   async addBuyIn(id: string, amountCents: number): Promise<OpenSession> {
-    const { data: current, error: fetchError } = await this.client
-      .from('sessions')
-      .select('buy_in_cents, status')
-      .eq('id', id)
-      .eq('user_id', this.userId)
-      .single()
-    if (fetchError) throw fetchError
-    if (current.status !== 'open') throw new Error('Cannot add a buy-in to a closed session.')
-
-    const { data, error } = await this.client
-      .from('sessions')
-      .update({ buy_in_cents: current.buy_in_cents + amountCents })
-      .eq('id', id)
-      .eq('user_id', this.userId)
-      .eq('status', 'open')
-      .select('*')
-      .single()
+    const { data, error } = await this.client.rpc('add_buy_in', {
+      p_session_id: id,
+      p_amount_cents: amountCents,
+    })
     if (error) throw error
     return fromRow(data as SessionRow) as OpenSession
+  }
+
+  async pauseSession(id: string): Promise<OpenSession> {
+    const { data, error } = await this.client.rpc('pause_session', { p_session_id: id })
+    if (error) throw error
+    return fromRow(data as SessionRow) as OpenSession
+  }
+
+  async resumeSession(id: string): Promise<OpenSession> {
+    const { data, error } = await this.client.rpc('resume_session', { p_session_id: id })
+    if (error) throw error
+    return fromRow(data as SessionRow) as OpenSession
+  }
+
+  async listActivity(sessionId: string): Promise<SessionActivityEntry[]> {
+    const { data, error } = await this.client
+      .from('session_activity')
+      .select('*')
+      .eq('session_id', sessionId)
+      .order('created_at', { ascending: true })
+    if (error) throw error
+    return (data as SessionActivityRow[]).map((row) => ({
+      id: row.id,
+      sessionId: row.session_id,
+      userId: row.user_id,
+      type: row.type,
+      amountCents: row.amount_cents,
+      createdAt: row.created_at,
+    }))
   }
 
   async closeSession(id: string, input: CloseSessionInput): Promise<ClosedSession> {

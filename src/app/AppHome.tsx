@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DashboardPage } from '@/features/dashboard/DashboardPage'
+import { Outlet } from 'react-router-dom'
 import { useAuthContext } from '@/features/auth/authContext'
 import { GuestConversionPrompt } from '@/features/auth/components/GuestConversionPrompt'
 import { hasGuestData } from '@/features/auth/guestSession'
@@ -53,7 +53,7 @@ export function AppHome() {
           </div>
         )}
 
-        <DashboardPage />
+        <Outlet />
       </div>
 
       {showConversionPrompt && (

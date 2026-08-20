@@ -25,6 +25,15 @@ class NullAdapter implements DataAdapter {
   logCompletedSession(): Promise<never> {
     this.fail()
   }
+  pauseSession(): Promise<never> {
+    this.fail()
+  }
+  resumeSession(): Promise<never> {
+    this.fail()
+  }
+  listActivity(): Promise<never> {
+    this.fail()
+  }
   deleteSession(): Promise<never> {
     this.fail()
   }

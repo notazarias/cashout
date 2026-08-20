@@ -54,6 +54,18 @@ export function useSessions() {
     return updated
   }
 
+  async function pauseSession(id: string) {
+    const updated = await adapter.pauseSession(id)
+    setSessions((prev) => prev.map((s) => (s.id === id ? updated : s)))
+    return updated
+  }
+
+  async function resumeSession(id: string) {
+    const updated = await adapter.resumeSession(id)
+    setSessions((prev) => prev.map((s) => (s.id === id ? updated : s)))
+    return updated
+  }
+
   async function logCompletedSession(input: LogCompletedSessionInput) {
     const session = await adapter.logCompletedSession(input)
     setSessions((prev) => [...prev, session])
@@ -75,6 +87,8 @@ export function useSessions() {
     startSession,
     addBuyIn,
     closeSession,
+    pauseSession,
+    resumeSession,
     logCompletedSession,
     deleteSession,
   }

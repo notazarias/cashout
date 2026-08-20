@@ -10,11 +10,11 @@ export function netCents(session: ClosedSession): number {
  * sessions, which never get live timestamps.
  */
 export function derivedDurationMinutes(
-  session: Pick<ClosedSession, 'startedAt' | 'closedAt' | 'durationMinutes'>,
+  session: Pick<ClosedSession, 'startedAt' | 'closedAt' | 'durationMinutes' | 'totalPausedSeconds'>,
 ): number | undefined {
   if (session.startedAt && session.closedAt) {
     const ms = new Date(session.closedAt).getTime() - new Date(session.startedAt).getTime()
-    return Math.round(ms / 60000)
+    return Math.round((ms - session.totalPausedSeconds * 1000) / 60000)
   }
   return session.durationMinutes
 }
