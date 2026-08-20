@@ -1,45 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import type { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import type { NewSessionInput, Session } from '@/lib/dataAdapter/types'
+import type { LogCompletedSessionInput } from '@/lib/dataAdapter/types'
+import { logPastSessionSchema, todayIso } from '../schemas'
 
-const schema = z.object({
-  date: z.string().min(1, 'Date is required'),
-  locationLabel: z.string().optional(),
-  buyIn: z.coerce.number().min(0, 'Must be 0 or more'),
-  cashOut: z.coerce.number().min(0, 'Must be 0 or more'),
-  durationMinutes: z.coerce.number().min(0).optional(),
-})
-
-type FormInput = z.input<typeof schema>
-type FormOutput = z.output<typeof schema>
-
-function todayIso(): string {
-  return new Date().toISOString().slice(0, 10)
-}
-
-function toDefaults(session?: Session): FormInput {
-  if (!session) return { date: todayIso(), locationLabel: '', buyIn: 0, cashOut: 0, durationMinutes: undefined }
-  return {
-    date: session.date,
-    locationLabel: session.locationLabel ?? '',
-    buyIn: session.buyInCents / 100,
-    cashOut: session.cashOutCents / 100,
-    durationMinutes: session.durationMinutes,
-  }
-}
+type FormInput = z.input<typeof logPastSessionSchema>
+type FormOutput = z.output<typeof logPastSessionSchema>
 
 export function SessionForm({
-  initial,
-  submitLabel = 'Log Session',
   onSubmit,
   onCancel,
 }: {
-  initial?: Session
-  submitLabel?: string
-  onSubmit: (input: NewSessionInput) => Promise<void>
+  onSubmit: (input: LogCompletedSessionInput) => Promise<void>
   onCancel: () => void
 }) {
   const {
@@ -47,8 +21,8 @@ export function SessionForm({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormInput, unknown, FormOutput>({
-    resolver: zodResolver(schema),
-    defaultValues: toDefaults(initial),
+    resolver: zodResolver(logPastSessionSchema),
+    defaultValues: { date: todayIso(), locationLabel: '', buyIn: 0, cashOut: 0, durationMinutes: undefined },
   })
 
   async function submit(values: FormOutput) {
@@ -90,7 +64,7 @@ export function SessionForm({
       </div>
       <div className="mt-2 flex gap-2">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {submitLabel}
+          Log Session
         </Button>
         <Button type="button" variant="ghost" onClick={onCancel}>
           Cancel

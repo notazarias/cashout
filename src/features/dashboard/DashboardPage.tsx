@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Card } from '@/components/ui/Card'
 import { Money } from '@/components/ui/Mono'
+import { ActiveSessionBanner } from '@/features/sessions/components/ActiveSessionBanner'
 import { SessionHistoryList } from '@/features/sessions/components/SessionHistoryList'
 import { useSessions } from '@/features/sessions/useSessions'
 import { LocationBreakdown } from './components/LocationBreakdown'
@@ -18,19 +19,29 @@ import {
 } from './stats'
 
 export function DashboardPage() {
-  const { sessions, loading, error, createSession, updateSession, deleteSession } = useSessions()
+  const {
+    openSession,
+    closedSessions,
+    loading,
+    error,
+    startSession,
+    addBuyIn,
+    closeSession,
+    logCompletedSession,
+    deleteSession,
+  } = useSessions()
   const [locationFilter, setLocationFilter] = useState<string | null>(null)
 
-  const locationRows = useMemo(() => breakdownByLocation(sessions), [sessions])
+  const locationRows = useMemo(() => breakdownByLocation(closedSessions), [closedSessions])
 
-  const filteredSessions = useMemo(() => {
-    if (!locationFilter) return sessions
-    return sessions.filter((s) => (s.locationLabel?.trim() || 'Unspecified') === locationFilter)
-  }, [sessions, locationFilter])
+  const filteredClosedSessions = useMemo(() => {
+    if (!locationFilter) return closedSessions
+    return closedSessions.filter((s) => (s.locationLabel?.trim() || 'Unspecified') === locationFilter)
+  }, [closedSessions, locationFilter])
 
   const totalNet = useMemo(
-    () => filteredSessions.reduce((sum, s) => sum + netCents(s), 0),
-    [filteredSessions],
+    () => filteredClosedSessions.reduce((sum, s) => sum + netCents(s), 0),
+    [filteredClosedSessions],
   )
 
   if (loading) {
@@ -43,6 +54,19 @@ export function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-4">
+      <ActiveSessionBanner
+        session={openSession}
+        onStart={async (input) => {
+          await startSession(input)
+        }}
+        onAddBuyIn={async (id, amountCents) => {
+          await addBuyIn(id, amountCents)
+        }}
+        onCloseSession={async (id, input) => {
+          await closeSession(id, input)
+        }}
+      />
+
       <Card>
         <div className="mb-4 flex items-baseline justify-between">
           <h2 className="font-serif text-xl font-semibold text-paper">
@@ -50,20 +74,20 @@ export function DashboardPage() {
           </h2>
           <Money cents={totalNet} className="text-2xl" />
         </div>
-        <ProfitChart points={profitOverTime(filteredSessions)} />
+        <ProfitChart points={profitOverTime(filteredClosedSessions)} />
       </Card>
 
       <StatsSummary
-        winRate={winRate(filteredSessions)}
-        avgPerSessionCents={avgNetPerSession(filteredSessions)}
-        avgPerHourCents={avgNetPerHour(filteredSessions)}
-        sessionCount={filteredSessions.length}
+        winRate={winRate(filteredClosedSessions)}
+        avgPerSessionCents={avgNetPerSession(filteredClosedSessions)}
+        avgPerHourCents={avgNetPerHour(filteredClosedSessions)}
+        sessionCount={filteredClosedSessions.length}
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <h2 className="mb-3 font-serif text-lg font-semibold text-paper">Volume vs. Performance</h2>
-          <VolumeVsPerformanceChart data={volumeByMonth(filteredSessions)} />
+          <VolumeVsPerformanceChart data={volumeByMonth(filteredClosedSessions)} />
         </Card>
         <Card>
           <h2 className="mb-3 font-serif text-lg font-semibold text-paper">Bankroll by Location</h2>
@@ -72,9 +96,8 @@ export function DashboardPage() {
       </div>
 
       <SessionHistoryList
-        sessions={filteredSessions}
-        onCreate={createSession}
-        onUpdate={updateSession}
+        sessions={filteredClosedSessions}
+        onCreate={logCompletedSession}
         onDelete={deleteSession}
       />
     </div>

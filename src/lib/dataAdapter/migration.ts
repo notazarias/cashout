@@ -1,6 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { derivedDurationMinutes } from '@/features/dashboard/stats'
 import { LocalStorageAdapter } from './localStorageAdapter'
 import { SupabaseAdapter } from './supabaseAdapter'
+import { isClosedSession } from './types'
 
 /**
  * Moves guest-mode localStorage data into the newly-created account.
@@ -18,13 +20,25 @@ export async function migrateGuestDataToAccount(
   if (guestSessions.length === 0) return { migratedCount: 0 }
 
   for (const session of guestSessions) {
-    await accountAdapter.createSession({
-      date: session.date,
-      buyInCents: session.buyInCents,
-      cashOutCents: session.cashOutCents,
-      durationMinutes: session.durationMinutes,
-      locationLabel: session.locationLabel,
-    })
+    if (isClosedSession(session)) {
+      await accountAdapter.logCompletedSession({
+        date: session.date,
+        locationLabel: session.locationLabel,
+        buyInCents: session.buyInCents,
+        cashOutCents: session.cashOutCents,
+        durationMinutes: derivedDurationMinutes(session),
+      })
+    } else {
+      // Rare edge case: guest was mid-session when they created an account.
+      // Recreate as a fresh open account-side session — startedAt resets to
+      // "now" (small fidelity loss, acceptable vs. adding adapter surface
+      // just for this path). Safe because only one open session can exist.
+      await accountAdapter.startSession({
+        date: session.date,
+        locationLabel: session.locationLabel,
+        buyInCents: session.buyInCents,
+      })
+    }
   }
 
   for (const session of guestSessions) {

@@ -1,22 +1,71 @@
 export type AdapterMode = 'guest' | 'account'
+export type SessionStatus = 'open' | 'closed'
 
-export interface Session {
+interface BaseSession {
   id: string
   userId: string | null
   date: string
   buyInCents: number
-  cashOutCents: number
-  durationMinutes?: number
   locationLabel?: string
+  durationMinutes?: number
+  startedAt: string | null
+  closedAt: string | null
   createdAt: string
 }
 
-export type NewSessionInput = Omit<Session, 'id' | 'userId' | 'createdAt'>
+export interface OpenSession extends BaseSession {
+  status: 'open'
+  cashOutCents: null
+}
+
+export interface ClosedSession extends BaseSession {
+  status: 'closed'
+  cashOutCents: number
+}
+
+export type Session = OpenSession | ClosedSession
+
+export function isOpenSession(s: Session): s is OpenSession {
+  return s.status === 'open'
+}
+
+export function isClosedSession(s: Session): s is ClosedSession {
+  return s.status === 'closed'
+}
+
+export interface StartSessionInput {
+  date: string
+  locationLabel?: string
+  buyInCents: number
+}
+
+export interface LogCompletedSessionInput {
+  date: string
+  locationLabel?: string
+  buyInCents: number
+  cashOutCents: number
+  durationMinutes?: number
+}
+
+export interface CloseSessionInput {
+  cashOutCents: number
+}
+
+/** Thrown by the app-level pre-check and the DB unique-index fallback alike. */
+export class DuplicateOpenSessionError extends Error {
+  constructor() {
+    super('You already have an active session — close it before starting a new one.')
+    this.name = 'DuplicateOpenSessionError'
+  }
+}
 
 export interface DataAdapter {
   readonly mode: AdapterMode
   listSessions(): Promise<Session[]>
-  createSession(input: NewSessionInput): Promise<Session>
-  updateSession(id: string, patch: Partial<NewSessionInput>): Promise<Session>
+  /** v1 deliberately does not auto-close or nudge long-open sessions. */
+  startSession(input: StartSessionInput): Promise<OpenSession>
+  addBuyIn(id: string, amountCents: number): Promise<OpenSession>
+  closeSession(id: string, input: CloseSessionInput): Promise<ClosedSession>
+  logCompletedSession(input: LogCompletedSessionInput): Promise<ClosedSession>
   deleteSession(id: string): Promise<void>
 }

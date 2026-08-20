@@ -1,6 +1,6 @@
 import { Money, Mono } from '@/components/ui/Mono'
-import type { Session } from '@/lib/dataAdapter/types'
-import { netCents } from '@/features/dashboard/stats'
+import type { ClosedSession } from '@/lib/dataAdapter/types'
+import { derivedDurationMinutes, netCents } from '@/features/dashboard/stats'
 
 function formatDate(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number)
@@ -38,15 +38,13 @@ function TornEdge() {
 
 export function SessionTicketCard({
   session,
-  onEdit,
   onDelete,
 }: {
-  session: Session
-  onEdit: () => void
+  session: ClosedSession
   onDelete: () => void
 }) {
   const net = netCents(session)
-  const duration = formatDuration(session.durationMinutes)
+  const duration = formatDuration(derivedDurationMinutes(session))
 
   return (
     <div className="overflow-hidden rounded-sm border border-sage/30">
@@ -77,9 +75,6 @@ export function SessionTicketCard({
             )}
           </div>
           <div className="flex gap-3">
-            <button onClick={onEdit} className="text-sage hover:text-paper">
-              Edit
-            </button>
             <button onClick={onDelete} className="text-sage hover:text-brick">
               Delete
             </button>
