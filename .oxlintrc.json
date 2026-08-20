@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "no-restricted-imports": [
+      "error",
+      { "paths": [{ "name": "@supabase/supabase-js", "message": "Import supabase only from src/lib/supabaseClient.ts or an adapter under src/lib/dataAdapter/ — feature code should go through useDataAdapter() instead." }] }
+    ],
+    "no-restricted-globals": [
+      "error",
+      { "name": "localStorage", "message": "Don't touch localStorage directly outside src/lib/dataAdapter/ and src/features/auth/guestSession.ts — go through useDataAdapter() or guestSession.ts instead." }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/lib/supabaseClient.ts", "src/lib/dataAdapter/**", "src/features/auth/authContext.tsx"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["src/lib/dataAdapter/**", "src/features/auth/guestSession.ts", "src/features/auth/authContext.tsx"],
+      "rules": {
+        "no-restricted-globals": "off"
+      }
+    }
+  ]
+}

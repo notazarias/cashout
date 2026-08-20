@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/fraunces/500.css';
+@import '@fontsource/fraunces/600.css';
+
+@theme {
+  --color-ink: #14171c;
+  --color-felt: #1f2a24;
+  --color-paper: #e8e3d8;
+  --color-brass: #c9a227;
+  --color-brick: #b24b3c;
+  --color-sage: #5b7a6c;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --color-ink: #14171c;
+  --color-felt: #1f2a24;
+  --color-paper: #e8e3d8;
+  --color-brass: #c9a227;
+  --color-brick: #b24b3c;
+  --color-sage: #5b7a6c;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}

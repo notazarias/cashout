@@ -1,0 +1,57 @@
+import { useState } from 'react'
+import { Button } from '@/components/ui/Button'
+import { Card } from '@/components/ui/Card'
+import { useAuthContext } from '../authContext'
+import { EmailPasswordForm } from './EmailPasswordForm'
+import { GoogleOAuthButton } from './GoogleOAuthButton'
+
+/**
+ * Shown when a guest explicitly logs out. Tab-close can't trigger a custom
+ * prompt (browsers only allow a generic beforeunload confirm) — the
+ * fallback for that case is that guest mode simply persists across reload
+ * (see guestSession.ts), so the same "save your results" ask surfaces here
+ * next time they choose to log out, rather than being lost.
+ */
+export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) {
+  const { exitGuestSession } = useAuthContext()
+  const [wantsAccount, setWantsAccount] = useState(false)
+
+  function handleDiscard() {
+    exitGuestSession()
+    onDecline()
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+      <Card className="w-full max-w-sm">
+        {!wantsAccount ? (
+          <>
+            <h2 className="mb-2 font-serif text-xl font-semibold text-paper">
+              Save this session's results?
+            </h2>
+            <p className="mb-6 font-sans text-sm text-sage">
+              Create an account and we'll move your guest data over. Otherwise it's gone once you log out.
+            </p>
+            <div className="flex flex-col gap-2">
+              <Button onClick={() => setWantsAccount(true)}>Create an Account</Button>
+              <Button variant="ghost" onClick={handleDiscard}>
+                No thanks, discard it
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2 className="mb-4 font-serif text-xl font-semibold text-paper">Create your account</h2>
+            <EmailPasswordForm migrateGuestData />
+            <div className="my-4 flex items-center gap-3">
+              <div className="h-px flex-1 bg-sage/30" />
+              <span className="font-sans text-xs text-sage">or</span>
+              <div className="h-px flex-1 bg-sage/30" />
+            </div>
+            <GoogleOAuthButton migrateGuestData />
+          </>
+        )}
+      </Card>
+    </div>
+  )
+}
