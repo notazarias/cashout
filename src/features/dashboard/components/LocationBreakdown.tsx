@@ -11,15 +11,15 @@ export function LocationBreakdown({
   onSelect: (location: string | null) => void
 }) {
   if (rows.length === 0) {
-    return <p className="font-sans text-sm text-sage">No locations logged yet.</p>
+    return <p className="font-sans text-sm text-paper/60">No locations logged yet.</p>
   }
 
   return (
     <div className="flex flex-col gap-1">
       <button
         onClick={() => onSelect(null)}
-        className={`flex items-center justify-between rounded-sm px-2 py-1.5 text-left font-sans text-sm transition-colors ${
-          selected === null ? 'bg-ink text-paper' : 'text-sage hover:bg-ink/50'
+        className={`flex items-center justify-between border-l-2 px-2 py-1.5 text-left font-sans text-sm transition-colors ${
+          selected === null ? 'border-amber text-amber' : 'border-transparent text-paper/70 hover:text-paper'
         }`}
       >
         <span>All Locations</span>
@@ -28,12 +28,12 @@ export function LocationBreakdown({
         <button
           key={row.location}
           onClick={() => onSelect(row.location)}
-          className={`flex items-center justify-between rounded-sm px-2 py-1.5 text-left font-sans text-sm transition-colors ${
-            selected === row.location ? 'bg-ink text-paper' : 'text-sage hover:bg-ink/50'
+          className={`flex items-center justify-between border-l-2 px-2 py-1.5 text-left font-sans text-sm transition-colors ${
+            selected === row.location ? 'border-amber text-amber' : 'border-transparent text-paper/70 hover:text-paper'
           }`}
         >
           <span>
-            {row.location} <Mono className="text-xs text-sage">({row.sessionCount})</Mono>
+            {row.location} <Mono className="text-xs text-paper/60">({row.sessionCount})</Mono>
           </span>
           <Money cents={row.netCents} className="text-sm" />
         </button>

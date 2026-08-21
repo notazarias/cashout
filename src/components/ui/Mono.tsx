@@ -11,7 +11,7 @@ export function Money({ cents, className = '' }: { cents: number; className?: st
     currency: 'USD',
     minimumFractionDigits: 2,
   })
-  const colorClass = cents > 0 ? 'text-brass' : cents < 0 ? 'text-brick' : 'text-paper'
+  const colorClass = cents > 0 ? 'text-amber' : cents < 0 ? 'text-loss' : 'text-paper'
   return (
     <Mono className={`${colorClass} ${className}`}>
       {cents > 0 ? '+' : ''}

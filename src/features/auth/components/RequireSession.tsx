@@ -8,7 +8,7 @@ export function RequireSession({ children }: { children: ReactNode }) {
   if (auth.status === 'loading') {
     return (
       <div className="flex min-h-screen items-center justify-center bg-ink">
-        <p className="font-sans text-sm text-sage">Loading…</p>
+        <p className="font-sans text-sm text-paper/60">Loading…</p>
       </div>
     )
   }

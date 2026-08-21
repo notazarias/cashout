@@ -17,14 +17,14 @@ export function ActiveSessionBanner({
   if (!session) {
     return (
       <>
-        <Card className="flex items-center justify-between">
-          <p className="font-sans text-sm text-sage">No session in progress.</p>
+        <Card className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-sans text-sm text-paper/60">No session in progress.</p>
           <Button onClick={() => setShowStart(true)}>Start Session</Button>
         </Card>
         {showStart && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
             <Card className="w-full max-w-sm">
-              <h2 className="mb-4 font-serif text-xl font-semibold text-paper">Start a Session</h2>
+              <h2 className="mb-4 font-serif text-xl text-paper">Start a Session</h2>
               <StartSessionForm
                 onSubmit={async (input) => {
                   await onStart(input)
@@ -40,17 +40,17 @@ export function ActiveSessionBanner({
   }
 
   return (
-    <Card className="border-brass/60">
+    <Card className="border-amber/60">
       <Link to={`/app/session/${session.id}`} className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="rounded-sm bg-brass px-1.5 py-0.5 font-mono text-[10px] font-medium text-ink">
+          <span className="rounded-sm bg-amber px-1.5 py-0.5 font-mono text-[10px] font-medium text-ink">
             LIVE
           </span>
           <span className="font-sans text-sm text-paper">
             Session in progress{session.locationLabel ? ` at ${session.locationLabel}` : ''}
           </span>
         </div>
-        <span className="font-sans text-sm font-medium text-brass">Resume →</span>
+        <span className="font-sans text-sm font-medium text-amber">Resume →</span>
       </Link>
     </Card>
   )

@@ -1,32 +1,31 @@
 @import 'tailwindcss';
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/500.css';
-@import '@fontsource/fraunces/500.css';
-@import '@fontsource/fraunces/600.css';
+@import '@fontsource/instrument-serif/400.css';
 
 @theme {
-  --color-ink: #14171c;
-  --color-felt: #1f2a24;
-  --color-paper: #e8e3d8;
-  --color-brass: #c9a227;
-  --color-brick: #b24b3c;
-  --color-sage: #5b7a6c;
+  --color-ink: #0b1220;
+  --color-paper: #ede7d9;
+  --color-paper-dim: #1a2233;
+  --color-amber: #d4a24c;
+  --color-teal: #3e7c74;
+  --color-loss: #c0574a;
 
-  --font-serif: 'Fraunces', Georgia, serif;
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 :root {
-  --color-ink: #14171c;
-  --color-felt: #1f2a24;
-  --color-paper: #e8e3d8;
-  --color-brass: #c9a227;
-  --color-brick: #b24b3c;
-  --color-sage: #5b7a6c;
+  --color-ink: #0b1220;
+  --color-paper: #ede7d9;
+  --color-paper-dim: #1a2233;
+  --color-amber: #d4a24c;
+  --color-teal: #3e7c74;
+  --color-loss: #c0574a;
 }
 
 body {

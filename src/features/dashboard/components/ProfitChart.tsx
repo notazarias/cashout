@@ -1,9 +1,5 @@
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Line, LineChart, ResponsiveContainer } from 'recharts'
 import type { ProfitPoint } from '../stats'
-
-function formatDollars(cents: number): string {
-  return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
-}
 
 function splitOffset(points: ProfitPoint[]): number {
   const values = points.map((p) => p.cumulativeCents)
@@ -14,23 +10,10 @@ function splitOffset(points: ProfitPoint[]): number {
   return max / (max - min)
 }
 
-function ChartTooltip({ active, payload }: { active?: boolean; payload?: { payload: ProfitPoint }[] }) {
-  if (!active || !payload?.length) return null
-  const point = payload[0].payload
-  return (
-    <div className="rounded-sm border border-sage/40 bg-ink px-3 py-2 font-mono text-xs text-paper shadow-lg">
-      <div className="text-sage">{point.date}</div>
-      <div className={point.cumulativeCents >= 0 ? 'text-brass' : 'text-brick'}>
-        {formatDollars(point.cumulativeCents)}
-      </div>
-    </div>
-  )
-}
-
 export function ProfitChart({ points }: { points: ProfitPoint[] }) {
   if (points.length === 0) {
     return (
-      <div className="flex h-64 items-center justify-center font-sans text-sm text-sage">
+      <div className="flex h-20 items-center font-sans text-sm text-paper/60">
         Log a session to start your profit graph.
       </div>
     )
@@ -39,32 +22,25 @@ export function ProfitChart({ points }: { points: ProfitPoint[] }) {
   const offset = splitOffset(points)
 
   return (
-    <div className="h-64 w-full">
+    <div className="h-20 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={points} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+        <LineChart data={points} margin={{ top: 4, right: 2, bottom: 4, left: 2 }}>
           <defs>
             <linearGradient id="profitSplit" x1="0" y1="0" x2="0" y2="1">
-              <stop offset={offset} stopColor="#C9A227" stopOpacity={1} />
-              <stop offset={offset} stopColor="#B24B3C" stopOpacity={1} />
-            </linearGradient>
-            <linearGradient id="profitSplitFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset={offset} stopColor="#C9A227" stopOpacity={0.25} />
-              <stop offset={offset} stopColor="#B24B3C" stopOpacity={0.25} />
+              <stop offset={offset} stopColor="#D4A24C" />
+              <stop offset={offset} stopColor="#C0574A" />
             </linearGradient>
           </defs>
-          <XAxis dataKey="date" hide />
-          <YAxis hide domain={['auto', 'auto']} />
-          <Tooltip content={<ChartTooltip />} />
-          <Area
+          <Line
             type="linear"
             dataKey="cumulativeCents"
             stroke="url(#profitSplit)"
             strokeWidth={2}
-            fill="url(#profitSplitFill)"
+            dot={false}
             isAnimationActive
             animationDuration={600}
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   )

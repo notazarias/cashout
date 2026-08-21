@@ -17,7 +17,7 @@ export function AuthCallback() {
   // user back to "/" mid-login.
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink">
-      <p className="font-sans text-sm text-sage">Signing you in…</p>
+      <p className="font-sans text-sm text-paper/60">Signing you in…</p>
     </div>
   )
 }

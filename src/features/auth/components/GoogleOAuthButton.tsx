@@ -24,7 +24,7 @@ export function GoogleOAuthButton({ migrateGuestData = false }: { migrateGuestDa
       <Button type="button" variant="secondary" onClick={handleClick} disabled={loading} className="w-full">
         {loading ? 'Redirecting…' : 'Continue with Google'}
       </Button>
-      {error && <p className="mt-2 text-sm text-brick">{error}</p>}
+      {error && <p className="mt-2 text-sm text-loss">{error}</p>}
     </div>
   )
 }

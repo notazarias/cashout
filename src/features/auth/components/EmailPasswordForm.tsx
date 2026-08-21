@@ -53,7 +53,7 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
       <div>
         <Input type="email" placeholder="Email" autoComplete="email" {...register('email')} />
-        {errors.email && <p className="mt-1 text-xs text-brick">{errors.email.message}</p>}
+        {errors.email && <p className="mt-1 text-xs text-loss">{errors.email.message}</p>}
       </div>
       <div>
         <Input
@@ -62,9 +62,9 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
           {...register('password')}
         />
-        {errors.password && <p className="mt-1 text-xs text-brick">{errors.password.message}</p>}
+        {errors.password && <p className="mt-1 text-xs text-loss">{errors.password.message}</p>}
       </div>
-      {formError && <p className="text-sm text-brick">{formError}</p>}
+      {formError && <p className="text-sm text-loss">{formError}</p>}
       <Button type="submit" disabled={isSubmitting}>
         {mode === 'login' ? 'Log In' : 'Create Account'}
       </Button>
@@ -74,7 +74,7 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
           setMode(mode === 'login' ? 'signup' : 'login')
           setFormError(null)
         }}
-        className="font-sans text-xs text-sage hover:text-paper"
+        className="font-sans text-xs text-paper/60 hover:text-paper"
       >
         {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Log in'}
       </button>

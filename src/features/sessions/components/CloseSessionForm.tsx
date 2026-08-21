@@ -32,9 +32,9 @@ export function CloseSessionForm({
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-3">
       <div>
-        <label className="mb-1 block font-sans text-xs text-sage">Cash-out ($)</label>
+        <label className="mb-1 block font-sans text-xs text-paper/60">Cash-out ($)</label>
         <Input type="number" step="0.01" min="0" autoFocus {...register('cashOut')} />
-        {errors.cashOut && <p className="mt-1 text-xs text-brick">{errors.cashOut.message}</p>}
+        {errors.cashOut && <p className="mt-1 text-xs text-loss">{errors.cashOut.message}</p>}
       </div>
       <div className="mt-2 flex gap-2">
         <Button type="submit" disabled={isSubmitting} className="flex-1">

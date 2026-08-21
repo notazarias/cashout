@@ -38,28 +38,28 @@ export function SessionForm({
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-3">
       <div>
-        <label className="mb-1 block font-sans text-xs text-sage">Date</label>
+        <label className="mb-1 block font-sans text-xs text-paper/60">Date</label>
         <Input type="date" {...register('date')} />
-        {errors.date && <p className="mt-1 text-xs text-brick">{errors.date.message}</p>}
+        {errors.date && <p className="mt-1 text-xs text-loss">{errors.date.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-sage">Location (optional)</label>
+        <label className="mb-1 block font-sans text-xs text-paper/60">Location (optional)</label>
         <Input type="text" placeholder="e.g. Home Game, Bellagio" {...register('locationLabel')} />
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="mb-1 block font-sans text-xs text-sage">Buy-in ($)</label>
+          <label className="mb-1 block font-sans text-xs text-paper/60">Buy-in ($)</label>
           <Input type="number" step="0.01" min="0" {...register('buyIn')} />
-          {errors.buyIn && <p className="mt-1 text-xs text-brick">{errors.buyIn.message}</p>}
+          {errors.buyIn && <p className="mt-1 text-xs text-loss">{errors.buyIn.message}</p>}
         </div>
         <div>
-          <label className="mb-1 block font-sans text-xs text-sage">Cash-out ($)</label>
+          <label className="mb-1 block font-sans text-xs text-paper/60">Cash-out ($)</label>
           <Input type="number" step="0.01" min="0" {...register('cashOut')} />
-          {errors.cashOut && <p className="mt-1 text-xs text-brick">{errors.cashOut.message}</p>}
+          {errors.cashOut && <p className="mt-1 text-xs text-loss">{errors.cashOut.message}</p>}
         </div>
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-sage">Duration in minutes (optional)</label>
+        <label className="mb-1 block font-sans text-xs text-paper/60">Duration in minutes (optional)</label>
         <Input type="number" step="1" min="0" placeholder="e.g. 180" {...register('durationMinutes')} />
       </div>
       <div className="mt-2 flex gap-2">

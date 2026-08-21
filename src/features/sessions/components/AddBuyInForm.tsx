@@ -34,7 +34,7 @@ export function AddBuyInForm({
     <form onSubmit={handleSubmit(submit)} className="flex items-start gap-2">
       <div>
         <Input type="number" step="0.01" min="0" placeholder="Amount" className="w-28" {...register('amount')} />
-        {errors.amount && <p className="mt-1 text-xs text-brick">{errors.amount.message}</p>}
+        {errors.amount && <p className="mt-1 text-xs text-loss">{errors.amount.message}</p>}
       </div>
       <Button type="submit" variant="secondary" disabled={isSubmitting}>
         {submitLabel}

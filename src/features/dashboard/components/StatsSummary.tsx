@@ -3,8 +3,8 @@ import { Money, Mono } from '@/components/ui/Mono'
 
 function StatTile({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="rounded-sm border border-sage/30 bg-felt px-4 py-3">
-      <div className="mb-1 font-sans text-xs uppercase tracking-wide text-sage">{label}</div>
+    <div className="flex-1 px-4 py-2 first:pl-0 sm:py-0">
+      <div className="mb-1 font-sans text-xs uppercase tracking-wide text-paper/60">{label}</div>
       <div className="text-lg">{children}</div>
     </div>
   )
@@ -22,7 +22,7 @@ export function StatsSummary({
   sessionCount: number
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="flex flex-col divide-y divide-paper/10 sm:flex-row sm:divide-x sm:divide-y-0">
       <StatTile label="Sessions">
         <Mono className="text-paper">{sessionCount}</Mono>
       </StatTile>
@@ -30,10 +30,14 @@ export function StatsSummary({
         <Mono className="text-paper">{winRate === null ? '—' : `${Math.round(winRate * 100)}%`}</Mono>
       </StatTile>
       <StatTile label="$ / Session">
-        {avgPerSessionCents === null ? <Mono className="text-sage">—</Mono> : <Money cents={avgPerSessionCents} />}
+        {avgPerSessionCents === null ? (
+          <Mono className="text-paper/60">—</Mono>
+        ) : (
+          <Money cents={avgPerSessionCents} />
+        )}
       </StatTile>
       <StatTile label="$ / Hour">
-        {avgPerHourCents === null ? <Mono className="text-sage">—</Mono> : <Money cents={avgPerHourCents} />}
+        {avgPerHourCents === null ? <Mono className="text-paper/60">—</Mono> : <Money cents={avgPerHourCents} />}
       </StatTile>
     </div>
   )

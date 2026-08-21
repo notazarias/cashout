@@ -23,8 +23,8 @@ export function SessionActivityFeed({
   entries: SessionActivityEntry[]
   loading: boolean
 }) {
-  if (loading) return <p className="font-sans text-sm text-sage">Loading activity…</p>
-  if (entries.length === 0) return <p className="font-sans text-sm text-sage">No activity yet.</p>
+  if (loading) return <p className="font-sans text-sm text-paper/60">Loading activity…</p>
+  if (entries.length === 0) return <p className="font-sans text-sm text-paper/60">No activity yet.</p>
 
   const sorted = [...entries].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
@@ -33,10 +33,10 @@ export function SessionActivityFeed({
       {sorted.map((entry) => (
         <li
           key={entry.id}
-          className="flex items-center justify-between border-b border-sage/10 pb-2 font-sans text-sm"
+          className="flex items-center justify-between border-b border-paper/10 pb-2 font-sans text-sm"
         >
           <span className="text-paper">{describeActivity(entry)}</span>
-          <Mono className="text-xs text-sage">{formatTime(entry.createdAt)}</Mono>
+          <Mono className="text-xs text-paper/60">{formatTime(entry.createdAt)}</Mono>
         </li>
       ))}
     </ul>

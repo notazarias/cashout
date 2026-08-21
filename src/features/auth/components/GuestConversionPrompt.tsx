@@ -26,10 +26,10 @@ export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) 
       <Card className="w-full max-w-sm">
         {!wantsAccount ? (
           <>
-            <h2 className="mb-2 font-serif text-xl font-semibold text-paper">
+            <h2 className="mb-2 font-serif text-xl text-paper">
               Save this session's results?
             </h2>
-            <p className="mb-6 font-sans text-sm text-sage">
+            <p className="mb-6 font-sans text-sm text-paper/60">
               Create an account and we'll move your guest data over. Otherwise it's gone once you log out.
             </p>
             <div className="flex flex-col gap-2">
@@ -41,12 +41,12 @@ export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) 
           </>
         ) : (
           <>
-            <h2 className="mb-4 font-serif text-xl font-semibold text-paper">Create your account</h2>
+            <h2 className="mb-4 font-serif text-xl text-paper">Create your account</h2>
             <EmailPasswordForm migrateGuestData />
             <div className="my-4 flex items-center gap-3">
-              <div className="h-px flex-1 bg-sage/30" />
-              <span className="font-sans text-xs text-sage">or</span>
-              <div className="h-px flex-1 bg-sage/30" />
+              <div className="h-px flex-1 bg-paper/15" />
+              <span className="font-sans text-xs text-paper/60">or</span>
+              <div className="h-px flex-1 bg-paper/15" />
             </div>
             <GoogleOAuthButton migrateGuestData />
           </>
