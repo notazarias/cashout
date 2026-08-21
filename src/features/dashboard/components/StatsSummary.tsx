@@ -3,9 +3,9 @@ import { Money, Mono } from '@/components/ui/Mono'
 
 function StatTile({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex-1 px-4 py-2 first:pl-0 sm:py-0">
-      <div className="mb-1 font-sans text-xs uppercase tracking-wide text-paper/60">{label}</div>
-      <div className="text-lg">{children}</div>
+    <div className="flex-1 px-6 py-3 first:pl-0 sm:py-0">
+      <div className="mb-2 font-sans text-xs uppercase tracking-wide text-paper/60">{label}</div>
+      <div className="text-3xl lg:text-4xl">{children}</div>
     </div>
   )
 }

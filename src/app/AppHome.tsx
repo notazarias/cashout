@@ -26,8 +26,8 @@ export function AppHome() {
   }
 
   return (
-    <div className="min-h-screen bg-ink px-6 py-8 lg:px-12">
-      <div className="mx-auto max-w-[1600px]">
+    <div className="min-h-screen bg-ink px-6 py-8 lg:px-12 xl:px-16">
+      <div className="mx-auto max-w-[1920px]">
         <header className="mb-6 flex items-center justify-between">
           <h1 className="font-serif text-2xl text-paper">CashOut</h1>
           <div className="flex items-center gap-3 font-sans text-sm text-paper/60">

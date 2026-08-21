@@ -54,14 +54,14 @@ export function DashboardPage() {
         }}
       />
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[55fr_45fr] lg:items-start">
-        <div className="flex flex-col gap-8">
-          <div>
-            <p className="mb-2 font-sans text-xs uppercase tracking-wide text-paper/60">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start">
+        <div className="flex flex-col gap-10">
+          <div className="py-2">
+            <p className="mb-3 font-sans text-xs uppercase tracking-wide text-paper/60">
               {locationFilter ?? 'All Locations'} · Running Total
             </p>
-            <Money cents={totalNet} className="block text-5xl font-medium tracking-tight md:text-6xl" />
-            <div className="mt-4">
+            <Money cents={totalNet} className="block text-7xl font-medium tracking-tight lg:text-8xl" />
+            <div className="mt-8">
               <ProfitChart points={profitOverTime(filteredClosedSessions)} />
             </div>
           </div>
@@ -73,13 +73,13 @@ export function DashboardPage() {
             sessionCount={filteredClosedSessions.length}
           />
 
-          <div className="flex flex-col gap-8 border-t border-paper/10 pt-8">
+          <div className="flex flex-col gap-10 border-t border-paper/10 pt-10">
             <div>
-              <h2 className="mb-4 font-serif text-lg text-paper">Volume vs. Performance</h2>
+              <h2 className="mb-5 font-serif text-2xl text-paper">Volume vs. Performance</h2>
               <VolumeVsPerformanceChart data={volumeByMonth(filteredClosedSessions)} />
             </div>
-            <div className="border-t border-paper/10 pt-8">
-              <h2 className="mb-4 font-serif text-lg text-paper">Bankroll by Location</h2>
+            <div className="border-t border-paper/10 pt-10">
+              <h2 className="mb-5 font-serif text-2xl text-paper">Bankroll by Location</h2>
               <LocationBreakdown rows={locationRows} selected={locationFilter} onSelect={setLocationFilter} />
             </div>
           </div>

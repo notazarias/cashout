@@ -20,18 +20,18 @@ function ChartTooltip({ active, payload }: { active?: boolean; payload?: { paylo
 export function VolumeVsPerformanceChart({ data }: { data: MonthlyVolume[] }) {
   if (data.length === 0) {
     return (
-      <div className="flex h-56 items-center justify-center font-sans text-sm text-paper/60">
+      <div className="flex h-64 items-center justify-center font-sans text-sm text-paper/60">
         Not enough sessions yet to compare volume against results.
       </div>
     )
   }
 
   return (
-    <div className="h-56 w-full">
+    <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
           <CartesianGrid stroke="#3E7C74" strokeOpacity={0.15} vertical={false} />
-          <XAxis dataKey="month" tick={{ fill: '#3E7C74', fontSize: 11 }} axisLine={{ stroke: '#3E7C74' }} tickLine={false} />
+          <XAxis dataKey="month" tick={{ fill: '#3E7C74', fontSize: 12 }} axisLine={{ stroke: '#3E7C74' }} tickLine={false} />
           <YAxis yAxisId="count" hide />
           <YAxis yAxisId="net" hide />
           <Tooltip content={<ChartTooltip />} />

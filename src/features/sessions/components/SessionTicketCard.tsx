@@ -34,15 +34,15 @@ export function SessionTicketCard({
   const isLoss = net < 0
 
   return (
-    <div className="group flex items-center justify-between gap-4 py-4">
+    <div className="group flex items-center justify-between gap-4 py-6">
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
-          <Mono className="text-sm text-paper">{formatDate(session.date)}</Mono>
+          <Mono className="text-base text-paper">{formatDate(session.date)}</Mono>
           {session.locationLabel && (
-            <span className="truncate font-sans text-sm text-paper/60">{session.locationLabel}</span>
+            <span className="truncate font-sans text-base text-paper/60">{session.locationLabel}</span>
           )}
         </div>
-        <div className="mt-1 flex flex-wrap gap-x-4 font-sans text-xs text-paper/60">
+        <div className="mt-2 flex flex-wrap gap-x-5 font-sans text-sm text-paper/60">
           <span>
             Buy-in <Mono className="text-paper/80">${(session.buyInCents / 100).toFixed(2)}</Mono>
           </span>
@@ -57,10 +57,10 @@ export function SessionTicketCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         {(isWin || isLoss) && <Stamp variant={isWin ? 'win' : 'loss'} />}
         <div className="flex flex-col items-end gap-1">
-          <Money cents={net} className="text-xl font-medium" />
+          <Money cents={net} className="text-2xl font-medium lg:text-3xl" />
           <button
             onClick={onDelete}
             className="font-sans text-xs text-paper/50 opacity-0 transition-opacity hover:text-loss focus-visible:opacity-100 group-hover:opacity-100"

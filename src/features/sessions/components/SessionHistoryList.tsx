@@ -33,8 +33,8 @@ export function SessionHistoryList({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-serif text-xl text-paper">Session History</h2>
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="font-serif text-2xl text-paper">Session History</h2>
         <Button variant="secondary" onClick={() => setModalOpen(true)}>
           + Log a Past Session
         </Button>

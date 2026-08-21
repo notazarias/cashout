@@ -15,10 +15,10 @@ export function LocationBreakdown({
   }
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-2">
       <button
         onClick={() => onSelect(null)}
-        className={`flex items-center justify-between border-l-2 px-2 py-1.5 text-left font-sans text-sm transition-colors ${
+        className={`flex items-center justify-between border-l-2 px-3 py-2.5 text-left font-sans text-base transition-colors ${
           selected === null ? 'border-amber text-amber' : 'border-transparent text-paper/70 hover:text-paper'
         }`}
       >
@@ -28,14 +28,14 @@ export function LocationBreakdown({
         <button
           key={row.location}
           onClick={() => onSelect(row.location)}
-          className={`flex items-center justify-between border-l-2 px-2 py-1.5 text-left font-sans text-sm transition-colors ${
+          className={`flex items-center justify-between border-l-2 px-3 py-2.5 text-left font-sans text-base transition-colors ${
             selected === row.location ? 'border-amber text-amber' : 'border-transparent text-paper/70 hover:text-paper'
           }`}
         >
           <span>
-            {row.location} <Mono className="text-xs text-paper/60">({row.sessionCount})</Mono>
+            {row.location} <Mono className="text-sm text-paper/60">({row.sessionCount})</Mono>
           </span>
-          <Money cents={row.netCents} className="text-sm" />
+          <Money cents={row.netCents} className="text-base" />
         </button>
       ))}
     </div>
