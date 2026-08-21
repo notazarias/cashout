@@ -60,7 +60,7 @@ export function DashboardPage() {
             <p className="mb-3 font-sans text-xs uppercase tracking-wide text-paper/60">
               {locationFilter ?? 'All Locations'} · Running Total
             </p>
-            <Money cents={totalNet} className="block text-7xl font-medium tracking-tight lg:text-8xl" />
+            <Money cents={totalNet} className="block text-6xl font-medium tracking-tight lg:text-7xl" />
             <div className="mt-8">
               <ProfitChart points={profitOverTime(filteredClosedSessions)} />
             </div>

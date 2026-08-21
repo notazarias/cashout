@@ -37,12 +37,12 @@ export function SessionTicketCard({
     <div className="group flex items-center justify-between gap-4 py-6">
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
-          <Mono className="text-base text-paper">{formatDate(session.date)}</Mono>
+          <Mono className="text-lg text-paper">{formatDate(session.date)}</Mono>
           {session.locationLabel && (
             <span className="truncate font-sans text-base text-paper/60">{session.locationLabel}</span>
           )}
         </div>
-        <div className="mt-2 flex flex-wrap gap-x-5 font-sans text-sm text-paper/60">
+        <div className="mt-2 flex flex-wrap gap-x-5 font-sans text-base text-paper/60">
           <span>
             Buy-in <Mono className="text-paper/80">${(session.buyInCents / 100).toFixed(2)}</Mono>
           </span>

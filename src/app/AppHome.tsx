@@ -28,9 +28,9 @@ export function AppHome() {
   return (
     <div className="min-h-screen bg-ink px-6 py-8 lg:px-12 xl:px-16">
       <div className="mx-auto max-w-[1920px]">
-        <header className="mb-6 flex items-center justify-between">
-          <h1 className="font-serif text-2xl text-paper">CashOut</h1>
-          <div className="flex items-center gap-3 font-sans text-sm text-paper/60">
+        <header className="mb-8 flex items-center justify-between">
+          <h1 className="font-serif text-4xl text-paper">CashOut</h1>
+          <div className="flex items-center gap-4 font-sans text-base text-paper/60">
             <span className="font-mono text-paper">
               {auth.status === 'account' ? auth.user.email : `guest-${auth.guestId.slice(0, 8)}`}
             </span>
