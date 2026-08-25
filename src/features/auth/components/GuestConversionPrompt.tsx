@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { useGuestTableSession } from '@/features/tables/useGuestTableSession'
 import { useAuthContext } from '../authContext'
 import { EmailPasswordForm } from './EmailPasswordForm'
 import { GoogleOAuthButton } from './GoogleOAuthButton'
@@ -14,9 +15,16 @@ import { GoogleOAuthButton } from './GoogleOAuthButton'
  */
 export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) {
   const { exitGuestSession } = useAuthContext()
+  const guestTable = useGuestTableSession()
   const [wantsAccount, setWantsAccount] = useState(false)
 
   function handleDiscard() {
+    if (guestTable.session) {
+      const proceed = window.confirm(
+        "You have an open table session — logging out means you can't get back into it until you rejoin. Log out anyway?",
+      )
+      if (!proceed) return
+    }
     exitGuestSession()
     onDecline()
   }

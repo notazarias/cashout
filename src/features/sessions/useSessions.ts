@@ -5,13 +5,15 @@ import {
   isClosedSession,
   isOpenSession,
   type CloseSessionInput,
+  type DataAdapter,
   type LogCompletedSessionInput,
   type Session,
   type StartSessionInput,
 } from '@/lib/dataAdapter/types'
 
-export function useSessions() {
-  const adapter = useDataAdapter()
+export function useSessions(overrideAdapter?: DataAdapter) {
+  const contextAdapter = useDataAdapter()
+  const adapter = overrideAdapter ?? contextAdapter
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

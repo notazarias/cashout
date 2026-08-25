@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Money, Mono } from '@/components/ui/Mono'
 import { derivedDurationMinutes, netCents } from '@/features/dashboard/stats'
-import type { ClosedSession } from '@/lib/dataAdapter/types'
+import type { ClosedSession, DataAdapter } from '@/lib/dataAdapter/types'
 import { AddBuyInForm } from './components/AddBuyInForm'
 import { CloseSessionForm } from './components/CloseSessionForm'
 import { ElapsedClock } from './components/ElapsedClock'
@@ -22,10 +22,11 @@ function formatStartedAt(iso: string | null): string {
   })
 }
 
-export function ActiveSessionScreen() {
+export function ActiveSessionScreen({ adapterOverride }: { adapterOverride?: DataAdapter } = {}) {
   const { id } = useParams<{ id: string }>()
-  const { openSession, loading, addBuyIn, pauseSession, resumeSession, closeSession } = useSessions()
-  const activity = useSessionActivity(id ?? null)
+  const { openSession, loading, addBuyIn, pauseSession, resumeSession, closeSession } =
+    useSessions(adapterOverride)
+  const activity = useSessionActivity(id ?? null, adapterOverride)
   const [showAddChips, setShowAddChips] = useState(false)
   const [showClose, setShowClose] = useState(false)
   const [closedSession, setClosedSession] = useState<ClosedSession | null>(null)
@@ -107,6 +108,11 @@ export function ActiveSessionScreen() {
         <p className="mt-1 font-sans text-sm text-paper/60">
           Started {formatStartedAt(session.startedAt)}
         </p>
+        {session.tableId && (
+          <p className="mt-1 font-sans text-sm text-paper/60">
+            Table code <Mono className="text-paper">{session.tableCode}</Mono>
+          </p>
+        )}
       </Card>
 
       <Card>

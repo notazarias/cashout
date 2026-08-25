@@ -5,6 +5,8 @@ import { RedirectIfSignedIn } from '@/features/auth/components/RedirectIfSignedI
 import { RequireSession } from '@/features/auth/components/RequireSession'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { ActiveSessionScreen } from '@/features/sessions/ActiveSessionScreen'
+import { GuestTableSessionScreen } from '@/features/tables/GuestTableSessionScreen'
+import { TableManageScreen } from '@/features/tables/TableManageScreen'
 import { AppHome } from './AppHome'
 
 export function AppRoutes() {
@@ -29,6 +31,8 @@ export function AppRoutes() {
       >
         <Route index element={<DashboardPage />} />
         <Route path="session/:id" element={<ActiveSessionScreen />} />
+        <Route path="table-session/:id" element={<GuestTableSessionScreen />} />
+        <Route path="table/:tableId" element={<TableManageScreen />} />
       </Route>
     </Routes>
   )

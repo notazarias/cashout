@@ -3,9 +3,11 @@ import { Outlet } from 'react-router-dom'
 import { useAuthContext } from '@/features/auth/authContext'
 import { GuestConversionPrompt } from '@/features/auth/components/GuestConversionPrompt'
 import { hasGuestData } from '@/features/auth/guestSession'
+import { useGuestTableSession } from '@/features/tables/useGuestTableSession'
 
 export function AppHome() {
   const { auth, signOutAccount, exitGuestSession } = useAuthContext()
+  const guestTable = useGuestTableSession()
   const [showConversionPrompt, setShowConversionPrompt] = useState(false)
 
   if (auth.status !== 'guest' && auth.status !== 'account') return null
@@ -13,6 +15,12 @@ export function AppHome() {
   const isGuest = auth.status === 'guest'
 
   function handleLogoutClick() {
+    if (isGuest && guestTable.session) {
+      const proceed = window.confirm(
+        "You have an open table session — logging out means you can't get back into it until you rejoin. Log out anyway?",
+      )
+      if (!proceed) return
+    }
     if (isGuest && hasGuestData()) {
       setShowConversionPrompt(true)
       return
@@ -42,7 +50,8 @@ export function AppHome() {
 
         {isGuest && (
           <div className="mb-4 rounded-sm border border-amber/40 bg-paper-dim px-4 py-3 font-sans text-sm text-paper">
-            You're in guest mode — nothing here is saved.{' '}
+            You're in guest mode — nothing here is saved
+            {guestTable.session ? ', except your live table session, which the host can see' : ''}.{' '}
             <button
               className="font-medium text-amber underline underline-offset-2"
               onClick={() => setShowConversionPrompt(true)}

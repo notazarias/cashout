@@ -1,5 +1,6 @@
 import type { Session as SupabaseSession, User as SupabaseUser } from '@supabase/supabase-js'
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { anonSupabase } from '@/lib/anonSupabaseClient'
 import { supabase } from '@/lib/supabaseClient'
 import { migrateGuestDataToAccount } from '@/lib/dataAdapter/migration'
 import { clearGuestSession, getGuestId, startGuestSession } from './guestSession'
@@ -78,6 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function exitGuestSession() {
     clearGuestSession()
+    // Callers (AppHome, GuestConversionPrompt) already warn first if an open
+    // table session exists — by the time this runs, that's been confirmed.
+    void anonSupabase.auth.signOut()
     setAuth({ status: 'logged_out' })
   }
 

@@ -35,6 +35,8 @@ const baseFields = {
   durationMinutes: z.number().optional(),
   pausedAt: z.string().nullable().default(null),
   totalPausedSeconds: z.number().default(0),
+  tableId: z.null().default(null),
+  tableCode: z.null().default(null),
   activity: z.array(activityEntrySchema).default([]),
   createdAt: z.string(),
 }
@@ -105,6 +107,8 @@ export class LocalStorageAdapter implements DataAdapter {
       closedAt: null,
       pausedAt: null,
       totalPausedSeconds: 0,
+      tableId: null,
+      tableCode: null,
       activity: [],
       createdAt: new Date().toISOString(),
     }
@@ -217,6 +221,8 @@ export class LocalStorageAdapter implements DataAdapter {
       closedAt: null,
       pausedAt: null,
       totalPausedSeconds: 0,
+      tableId: null,
+      tableCode: null,
       activity: [],
       createdAt: new Date().toISOString(),
     }

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDataAdapter } from '@/lib/dataAdapter'
-import type { SessionActivityEntry } from '@/lib/dataAdapter/types'
+import type { DataAdapter, SessionActivityEntry } from '@/lib/dataAdapter/types'
 
-export function useSessionActivity(sessionId: string | null) {
-  const adapter = useDataAdapter()
+export function useSessionActivity(sessionId: string | null, overrideAdapter?: DataAdapter) {
+  const contextAdapter = useDataAdapter()
+  const adapter = overrideAdapter ?? contextAdapter
   const [entries, setEntries] = useState<SessionActivityEntry[]>([])
   const [loading, setLoading] = useState(true)
 

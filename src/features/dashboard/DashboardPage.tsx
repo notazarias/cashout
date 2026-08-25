@@ -4,6 +4,9 @@ import { Money } from '@/components/ui/Mono'
 import { ActiveSessionBanner } from '@/features/sessions/components/ActiveSessionBanner'
 import { SessionHistoryList } from '@/features/sessions/components/SessionHistoryList'
 import { useSessions } from '@/features/sessions/useSessions'
+import { GuestTableSessionBanner } from '@/features/tables/components/GuestTableSessionBanner'
+import { HostedTableBanner } from '@/features/tables/components/HostedTableBanner'
+import { TableEntryPoints } from '@/features/tables/components/TableEntryPoints'
 import { LocationBreakdown } from './components/LocationBreakdown'
 import { ProfitChart } from './components/ProfitChart'
 import { StatsSummary } from './components/StatsSummary'
@@ -53,6 +56,11 @@ export function DashboardPage() {
           navigate(`/app/session/${session.id}`)
         }}
       />
+
+      <HostedTableBanner />
+      <GuestTableSessionBanner />
+
+      {!openSession && <TableEntryPoints />}
 
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start">
         <div className="flex flex-col gap-10">

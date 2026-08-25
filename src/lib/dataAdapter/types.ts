@@ -12,6 +12,8 @@ interface BaseSession {
   closedAt: string | null
   pausedAt: string | null
   totalPausedSeconds: number
+  tableId: string | null
+  tableCode: string | null
   createdAt: string
 }
 
