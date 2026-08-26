@@ -25,10 +25,26 @@ export interface JoinTableInput {
   date: string
   locationLabel?: string
   buyInCents: number
+  displayName?: string
 }
 
-/** Roster-only view — playerEmail is a join-time snapshot, not a general Session field. */
-export type TableRosterEntry = Session & { playerEmail: string | null }
+/** Roster-only view — playerEmail/playerDisplayName are join-time snapshots, not general Session fields. */
+export type TableRosterEntry = Session & { playerEmail: string | null; playerDisplayName: string | null }
+
+export type SettlementMode = 'direct' | 'host'
+
+export interface Settlement {
+  id: string
+  tableId: string
+  fromUserId: string
+  fromDisplayName: string | null
+  toUserId: string
+  toDisplayName: string | null
+  amountCents: number
+  paid: boolean
+  paidAt: string | null
+  createdAt: string
+}
 
 export class DuplicateOpenTableError extends Error {
   constructor() {

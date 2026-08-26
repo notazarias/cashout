@@ -23,7 +23,7 @@ export function JoinTableForm({
     formState: { errors, isSubmitting },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(joinTableSchema),
-    defaultValues: { code: '', date: todayIso(), locationLabel: '', buyIn: 0 },
+    defaultValues: { code: '', date: todayIso(), locationLabel: '', buyIn: 0, displayName: '' },
   })
 
   async function submit(values: FormOutput) {
@@ -32,11 +32,17 @@ export function JoinTableForm({
       date: values.date,
       locationLabel: values.locationLabel?.trim() || undefined,
       buyInCents: Math.round(values.buyIn * 100),
+      displayName: values.displayName?.trim() || undefined,
     })
   }
 
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-3">
+      <div>
+        <label className="mb-1 block font-sans text-xs text-paper/60">Your Name (optional)</label>
+        <Input type="text" placeholder="e.g. Alex" {...register('displayName')} />
+        {errors.displayName && <p className="mt-1 text-xs text-loss">{errors.displayName.message}</p>}
+      </div>
       <div>
         <label className="mb-1 block font-sans text-xs text-paper/60">Table Code</label>
         <Input type="text" placeholder="e.g. AB3XQ9" className="uppercase" {...register('code')} />

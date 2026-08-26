@@ -20,7 +20,9 @@
         "src/lib/anonSupabaseClient.ts",
         "src/lib/dataAdapter/**",
         "src/features/auth/authContext.tsx",
-        "src/features/tables/tablesApi.ts"
+        "src/features/tables/tablesApi.ts",
+        "src/features/tables/settlementsApi.ts",
+        "src/features/tables/useSettlements.ts"
       ],
       "rules": {
         "no-restricted-imports": "off"

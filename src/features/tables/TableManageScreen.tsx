@@ -6,6 +6,7 @@ import { Money, Mono } from '@/components/ui/Mono'
 import { useAuth } from '@/features/auth/authContext'
 import { netCents } from '@/features/dashboard/stats'
 import { isClosedSession } from '@/lib/dataAdapter/types'
+import { TableSettlementSection } from './components/TableSettlementSection'
 import { closeTable, getTable } from './tablesApi'
 import { useTableRoster } from './useTableRoster'
 import type { Table } from './types'
@@ -86,7 +87,9 @@ export function TableManageScreen() {
             {roster.entries.map((entry) => (
               <div key={entry.id} className="flex items-center justify-between py-3">
                 <div>
-                  <p className="font-sans text-sm text-paper">{entry.playerEmail ?? 'Unknown player'}</p>
+                  <p className="font-sans text-sm text-paper">
+                    {entry.playerDisplayName?.trim() || entry.playerEmail?.trim() || 'Unknown player'}
+                  </p>
                   <p className="font-sans text-xs text-paper/60">
                     {entry.status === 'open' ? (
                       <span className="text-amber">Playing</span>
@@ -116,6 +119,8 @@ export function TableManageScreen() {
           {closeError && <p className="mt-2 font-sans text-sm text-loss">{closeError}</p>}
         </div>
       )}
+
+      {table.status === 'closed' && <TableSettlementSection table={table} roster={roster.entries} />}
     </div>
   )
 }

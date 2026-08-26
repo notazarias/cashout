@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Stamp } from '@/components/ui/Stamp'
 import { Money, Mono } from '@/components/ui/Mono'
 import type { ClosedSession } from '@/lib/dataAdapter/types'
@@ -53,6 +54,11 @@ export function SessionTicketCard({
             <span>
               Duration <Mono className="text-paper/80">{duration}</Mono>
             </span>
+          )}
+          {session.tableId && (
+            <Link to={`/app/table/${session.tableId}/settlement`} className="text-teal hover:text-paper">
+              Table ↗
+            </Link>
           )}
         </div>
       </div>

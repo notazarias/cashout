@@ -17,9 +17,12 @@ export const codeFieldSchema = z
   .min(1, 'Code is required')
   .transform((s) => s.trim().toUpperCase())
 
+export const displayNameFieldSchema = z.string().max(40, 'Keep it under 40 characters').optional()
+
 export const joinTableSchema = z.object({
   code: codeFieldSchema,
   date: dateFieldSchema,
   locationLabel: locationFieldSchema,
   buyIn: moneyFieldSchema,
+  displayName: displayNameFieldSchema,
 })

@@ -28,6 +28,7 @@ interface TableRow {
 
 interface RosterSessionRow extends SessionRow {
   player_email: string | null
+  player_display_name: string | null
 }
 
 function generateTableCode(): string {
@@ -84,6 +85,7 @@ export async function joinTable(input: JoinTableInput, client: SupabaseClient = 
     p_date: input.date,
     p_buy_in_cents: input.buyInCents,
     p_location_label: input.locationLabel ?? null,
+    p_display_name: input.displayName ?? null,
   })
   if (error) {
     if (error.code === '23505') throw new DuplicateOpenSessionError()
@@ -120,6 +122,7 @@ export async function listTableRoster(tableId: string): Promise<TableRosterEntry
   return (data as RosterSessionRow[]).map((row) => ({
     ...fromRow(row),
     playerEmail: row.player_email,
+    playerDisplayName: row.player_display_name,
   }))
 }
 
@@ -127,4 +130,28 @@ export async function closeTable(tableId: string): Promise<Table> {
   const { data, error } = await supabase.rpc('close_table', { p_table_id: tableId })
   if (error) throw new Error(error.message)
   return fromTableRow(data as TableRow)
+}
+
+/** Most recently closed table this host has that either has no settlement yet, or has one with an
+ * unpaid row — used to keep the settlement reachable from the dashboard after the table closes. */
+export async function getRecentUnsettledHostedTable(hostId: string): Promise<Table | null> {
+  const { data: closedTables, error } = await supabase
+    .from('tables')
+    .select('*')
+    .eq('host_id', hostId)
+    .eq('status', 'closed')
+    .order('closed_at', { ascending: false })
+    .limit(5)
+  if (error) throw error
+  for (const row of (closedTables ?? []) as TableRow[]) {
+    const { data: settlements, error: settlementsError } = await supabase
+      .from('settlements')
+      .select('paid')
+      .eq('table_id', row.id)
+    if (settlementsError) throw settlementsError
+    if (!settlements || settlements.length === 0 || settlements.some((s) => !s.paid)) {
+      return fromTableRow(row)
+    }
+  }
+  return null
 }

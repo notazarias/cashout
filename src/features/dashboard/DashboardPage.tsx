@@ -7,6 +7,7 @@ import { useSessions } from '@/features/sessions/useSessions'
 import { GuestTableSessionBanner } from '@/features/tables/components/GuestTableSessionBanner'
 import { HostedTableBanner } from '@/features/tables/components/HostedTableBanner'
 import { TableEntryPoints } from '@/features/tables/components/TableEntryPoints'
+import { TableSettlementBanner } from '@/features/tables/components/TableSettlementBanner'
 import { LocationBreakdown } from './components/LocationBreakdown'
 import { ProfitChart } from './components/ProfitChart'
 import { StatsSummary } from './components/StatsSummary'
@@ -58,6 +59,7 @@ export function DashboardPage() {
       />
 
       <HostedTableBanner />
+      <TableSettlementBanner />
       <GuestTableSessionBanner />
 
       {!openSession && <TableEntryPoints />}

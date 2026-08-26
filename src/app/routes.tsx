@@ -7,6 +7,7 @@ import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { ActiveSessionScreen } from '@/features/sessions/ActiveSessionScreen'
 import { GuestTableSessionScreen } from '@/features/tables/GuestTableSessionScreen'
 import { TableManageScreen } from '@/features/tables/TableManageScreen'
+import { TableSettlementScreen } from '@/features/tables/TableSettlementScreen'
 import { AppHome } from './AppHome'
 
 export function AppRoutes() {
@@ -33,6 +34,7 @@ export function AppRoutes() {
         <Route path="session/:id" element={<ActiveSessionScreen />} />
         <Route path="table-session/:id" element={<GuestTableSessionScreen />} />
         <Route path="table/:tableId" element={<TableManageScreen />} />
+        <Route path="table/:tableId/settlement" element={<TableSettlementScreen />} />
       </Route>
     </Routes>
   )
