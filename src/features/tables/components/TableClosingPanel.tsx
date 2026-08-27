@@ -42,7 +42,7 @@ export function TableClosingPanel({
 
       {table.status === 'open' && (
         <div>
-          <Button onClick={handleClose} disabled={closing || anyOpen}>
+          <Button size="lg" onClick={handleClose} disabled={closing || anyOpen}>
             Close Table
           </Button>
           {anyOpen && (

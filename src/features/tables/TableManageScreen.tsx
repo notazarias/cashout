@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
 import { Mono } from '@/components/ui/Mono'
+import { PageShell } from '@/components/ui/PageShell'
 import { useAuth } from '@/features/auth/authContext'
 import { TableClosingPanel } from './components/TableClosingPanel'
 import { getTable } from './tablesApi'
@@ -35,7 +36,7 @@ export function TableManageScreen() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+    <PageShell>
       <Card>
         <div className="flex items-center justify-between">
           <div>
@@ -61,6 +62,6 @@ export function TableManageScreen() {
         rosterLoading={roster.loading}
         onTableUpdate={setTable}
       />
-    </div>
+    </PageShell>
   )
 }

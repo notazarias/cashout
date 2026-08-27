@@ -34,22 +34,22 @@ export function HostTableForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-3">
+    <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Location (optional)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Location (optional)</label>
         <Input type="text" placeholder="e.g. Home Game, Bellagio" {...register('locationLabel')} />
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Suggested Buy-in ($)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Suggested Buy-in ($)</label>
         <Input type="number" step="0.01" min="0" {...register('buyIn')} />
         {errors.buyIn && <p className="mt-1 text-xs text-loss">{errors.buyIn.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Max Players (optional)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Max Players (optional)</label>
         <Input type="number" step="1" min="1" placeholder="e.g. 8" {...register('maxPlayers')} />
         {errors.maxPlayers && <p className="mt-1 text-xs text-loss">{errors.maxPlayers.message}</p>}
       </div>
-      <div className="mt-2 flex gap-2">
+      <div className="mt-2 flex gap-3">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           Host Table
         </Button>

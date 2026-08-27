@@ -37,27 +37,27 @@ export function JoinTableForm({
   }
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-3">
+    <form onSubmit={handleSubmit(submit)} className="flex flex-col gap-4">
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Your Name (optional)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Your Name (optional)</label>
         <Input type="text" placeholder="e.g. Alex" {...register('displayName')} />
         {errors.displayName && <p className="mt-1 text-xs text-loss">{errors.displayName.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Table Code</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Table Code</label>
         <Input type="text" placeholder="e.g. AB3XQ9" className="uppercase" {...register('code')} />
         {errors.code && <p className="mt-1 text-xs text-loss">{errors.code.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Buy-in ($)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Buy-in ($)</label>
         <Input type="number" step="0.01" min="0" {...register('buyIn')} />
         {errors.buyIn && <p className="mt-1 text-xs text-loss">{errors.buyIn.message}</p>}
       </div>
       <div>
-        <label className="mb-1 block font-sans text-xs text-paper/60">Location (optional)</label>
+        <label className="mb-1.5 block font-sans text-xs text-paper/60">Location (optional)</label>
         <Input type="text" placeholder="Defaults to the table's location" {...register('locationLabel')} />
       </div>
-      <div className="mt-2 flex gap-2">
+      <div className="mt-2 flex gap-3">
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           Join Table
         </Button>

@@ -55,7 +55,7 @@ export function TableEntryPoints() {
 
         {showJoin && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
-            <Card className="w-full max-w-sm">
+            <Card className="w-full max-w-md">
               <h2 className="mb-4 font-serif text-xl text-paper">Join a Table</h2>
               <JoinTableForm
                 onSubmit={async (input) => {

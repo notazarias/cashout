@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Mono } from '@/components/ui/Mono'
+import { PageShell } from '@/components/ui/PageShell'
 import { useAuth } from '@/features/auth/authContext'
 import { anonSupabase } from '@/lib/anonSupabaseClient'
 import { supabase } from '@/lib/supabaseClient'
@@ -82,7 +83,7 @@ export function TableSettlementScreen() {
   const mine = settlements.filter((s) => s.fromUserId === userId || s.toUserId === userId)
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+    <PageShell>
       <Link to="/app" className="font-sans text-sm text-teal hover:text-paper">
         ← Dashboard
       </Link>
@@ -123,6 +124,6 @@ export function TableSettlementScreen() {
           CashOut doesn't move money — this only tracks who owes what and whether it's been paid in real life.
         </p>
       </Card>
-    </div>
+    </PageShell>
   )
 }

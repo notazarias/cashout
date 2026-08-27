@@ -4,6 +4,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Money, Mono } from '@/components/ui/Mono'
+import { PageShell } from '@/components/ui/PageShell'
 import { derivedDurationMinutes, netCents } from '@/features/dashboard/stats'
 import { TableLiveStatusSection } from '@/features/tables/components/TableLiveStatusSection'
 import type { ClosedSession, DataAdapter } from '@/lib/dataAdapter/types'
@@ -63,16 +64,16 @@ export function ActiveSessionScreen({
     const net = netCents(closedSession)
     const duration = derivedDurationMinutes(closedSession)
     return (
-      <div className="mx-auto w-full max-w-2xl">
+      <PageShell>
         <Card>
           <h1 className="mb-1 font-serif text-2xl text-paper">Session Complete</h1>
-          <p className="mb-6 font-sans text-sm text-paper/60">
+          <p className="mb-8 font-sans text-sm text-paper/60">
             {closedSession.locationLabel || 'Session'} · {closedSession.date}
           </p>
-          <div className="mb-6">
-            <Money cents={net} className="text-4xl" />
+          <div className="mb-8">
+            <Money cents={net} className="text-6xl font-medium tracking-tight lg:text-7xl" />
           </div>
-          <div className="mb-6 flex flex-col gap-1 font-sans text-sm text-paper/60">
+          <div className="mb-8 flex flex-col gap-1 font-sans text-base text-paper/60">
             <span>
               Buy-in <Mono className="text-paper">${(closedSession.buyInCents / 100).toFixed(2)}</Mono>
             </span>
@@ -87,16 +88,18 @@ export function ActiveSessionScreen({
           </div>
 
           {closedSession.tableId && (
-            <div className="mb-6 flex flex-col gap-4">
+            <div className="mb-8 flex flex-col gap-6">
               <TableLiveStatusSection tableId={closedSession.tableId} client={client} />
             </div>
           )}
 
           <Link to="/app">
-            <Button className="w-full">Back to Dashboard</Button>
+            <Button size="lg" className="w-full">
+              Back to Dashboard
+            </Button>
           </Link>
         </Card>
-      </div>
+      </PageShell>
     )
   }
 
@@ -104,7 +107,7 @@ export function ActiveSessionScreen({
   const mostRecent = [...activity.entries].sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-4">
+    <PageShell>
       <Link to="/app" className="font-sans text-sm text-teal hover:text-paper">
         ← Dashboard
       </Link>
@@ -129,21 +132,24 @@ export function ActiveSessionScreen({
       </Card>
 
       <Card>
-        <p className="mb-1 font-sans text-xs uppercase tracking-wide text-paper/60">In for</p>
-        <Mono className="text-4xl text-paper">${(session.buyInCents / 100).toFixed(2)}</Mono>
-        <div className="mt-3 flex items-center gap-4">
+        <p className="mb-3 font-sans text-xs uppercase tracking-wide text-paper/60">In for</p>
+        <Mono className="text-6xl font-medium tracking-tight text-paper lg:text-7xl">
+          ${(session.buyInCents / 100).toFixed(2)}
+        </Mono>
+        <div className="mt-8 flex items-center gap-4">
           <div>
-            <p className="mb-1 font-sans text-xs uppercase tracking-wide text-paper/60">Elapsed</p>
-            <ElapsedClock session={session} className="text-lg text-paper" />
+            <p className="mb-2 font-sans text-xs uppercase tracking-wide text-paper/60">Elapsed</p>
+            <ElapsedClock session={session} className="text-3xl text-paper lg:text-4xl" />
           </div>
         </div>
-        <p className="mt-4 font-sans text-sm text-paper/60">
+        <p className="mt-6 font-sans text-sm text-paper/60">
           {mostRecent ? `Last activity: ${new Date(mostRecent.createdAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}` : 'No activity yet.'}
         </p>
       </Card>
 
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-4">
         <Button
+          size="lg"
           variant="secondary"
           onClick={async () => {
             if (session.pausedAt) {
@@ -156,14 +162,16 @@ export function ActiveSessionScreen({
         >
           {session.pausedAt ? 'Resume' : 'Pause'}
         </Button>
-        <Button variant="secondary" onClick={() => setShowAddChips(true)}>
+        <Button size="lg" variant="secondary" onClick={() => setShowAddChips(true)}>
           Add Chips
         </Button>
-        <Button onClick={() => setShowClose(true)}>Cash Out</Button>
+        <Button size="lg" onClick={() => setShowClose(true)}>
+          Cash Out
+        </Button>
       </div>
 
       <Card>
-        <h2 className="mb-3 font-serif text-lg text-paper">Activity</h2>
+        <h2 className="mb-4 font-serif text-lg text-paper">Activity</h2>
         <SessionActivityFeed entries={activity.entries} loading={activity.loading} />
       </Card>
 
@@ -204,6 +212,6 @@ export function ActiveSessionScreen({
           </Card>
         </div>
       )}
-    </div>
+    </PageShell>
   )
 }
