@@ -22,7 +22,10 @@
         "src/features/auth/authContext.tsx",
         "src/features/tables/tablesApi.ts",
         "src/features/tables/settlementsApi.ts",
-        "src/features/tables/useSettlements.ts"
+        "src/features/tables/useSettlements.ts",
+        "src/features/tables/useTableRoster.ts",
+        "src/features/tables/components/TableLiveStatusSection.tsx",
+        "src/features/sessions/ActiveSessionScreen.tsx"
       ],
       "rules": {
         "no-restricted-imports": "off"

@@ -1,9 +1,10 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import { listTableRoster } from './tablesApi'
 import type { TableRosterEntry } from './types'
 
-export function useTableRoster(tableId: string | null) {
+export function useTableRoster(tableId: string | null, client: SupabaseClient = supabase) {
   const [entries, setEntries] = useState<TableRosterEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -16,13 +17,13 @@ export function useTableRoster(tableId: string | null) {
     }
     setLoading(true)
     try {
-      setEntries(await listTableRoster(tableId))
+      setEntries(await listTableRoster(tableId, client))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load roster.')
     } finally {
       setLoading(false)
     }
-  }, [tableId])
+  }, [tableId, client])
 
   useEffect(() => {
     void refresh()
@@ -30,7 +31,7 @@ export function useTableRoster(tableId: string | null) {
 
   useEffect(() => {
     if (!tableId) return
-    const channel = supabase
+    const channel = client
       .channel(`table-roster-${tableId}`)
       .on(
         'postgres_changes',
@@ -39,9 +40,9 @@ export function useTableRoster(tableId: string | null) {
       )
       .subscribe()
     return () => {
-      void supabase.removeChannel(channel)
+      void client.removeChannel(channel)
     }
-  }, [tableId, refresh])
+  }, [tableId, client, refresh])
 
   return { entries, loading, error, refresh }
 }

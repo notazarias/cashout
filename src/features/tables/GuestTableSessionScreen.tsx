@@ -29,5 +29,5 @@ export function GuestTableSessionScreen() {
   if (!checked) return <p className="font-sans text-sm text-paper/60">Loading…</p>
   if (!userId || !adapter) return <Navigate to="/app" replace />
 
-  return <ActiveSessionScreen key={id} adapterOverride={adapter} />
+  return <ActiveSessionScreen key={id} adapterOverride={adapter} client={anonSupabase} />
 }

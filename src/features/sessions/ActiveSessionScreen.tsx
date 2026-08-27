@@ -1,10 +1,13 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Money, Mono } from '@/components/ui/Mono'
 import { derivedDurationMinutes, netCents } from '@/features/dashboard/stats'
+import { TableLiveStatusSection } from '@/features/tables/components/TableLiveStatusSection'
 import type { ClosedSession, DataAdapter } from '@/lib/dataAdapter/types'
+import { supabase } from '@/lib/supabaseClient'
 import { AddBuyInForm } from './components/AddBuyInForm'
 import { CloseSessionForm } from './components/CloseSessionForm'
 import { ElapsedClock } from './components/ElapsedClock'
@@ -22,7 +25,10 @@ function formatStartedAt(iso: string | null): string {
   })
 }
 
-export function ActiveSessionScreen({ adapterOverride }: { adapterOverride?: DataAdapter } = {}) {
+export function ActiveSessionScreen({
+  adapterOverride,
+  client = supabase,
+}: { adapterOverride?: DataAdapter; client?: SupabaseClient } = {}) {
   const { id } = useParams<{ id: string }>()
   const { openSession, loading, addBuyIn, pauseSession, resumeSession, closeSession } =
     useSessions(adapterOverride)
@@ -79,6 +85,13 @@ export function ActiveSessionScreen({ adapterOverride }: { adapterOverride?: Dat
               </span>
             )}
           </div>
+
+          {closedSession.tableId && (
+            <div className="mb-6 flex flex-col gap-4">
+              <TableLiveStatusSection tableId={closedSession.tableId} client={client} />
+            </div>
+          )}
+
           <Link to="/app">
             <Button className="w-full">Back to Dashboard</Button>
           </Link>

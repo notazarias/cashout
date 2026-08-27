@@ -105,15 +105,16 @@ export async function getHostedOpenTable(hostId: string): Promise<Table | null> 
   return data ? fromTableRow(data as TableRow) : null
 }
 
-/** RLS naturally returns no row for a non-host — treated as "not found." */
-export async function getTable(tableId: string): Promise<Table | null> {
-  const { data, error } = await supabase.from('tables').select('*').eq('id', tableId).maybeSingle()
+/** RLS naturally returns no row for a non-host — treated as "not found." A non-null result from a
+ * given client *is* the "am I the host" check for whoever that client is authenticated as. */
+export async function getTable(tableId: string, client: SupabaseClient = supabase): Promise<Table | null> {
+  const { data, error } = await client.from('tables').select('*').eq('id', tableId).maybeSingle()
   if (error) throw error
   return data ? fromTableRow(data as TableRow) : null
 }
 
-export async function listTableRoster(tableId: string): Promise<TableRosterEntry[]> {
-  const { data, error } = await supabase
+export async function listTableRoster(tableId: string, client: SupabaseClient = supabase): Promise<TableRosterEntry[]> {
+  const { data, error } = await client
     .from('sessions')
     .select('*')
     .eq('table_id', tableId)
