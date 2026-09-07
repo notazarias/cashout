@@ -31,7 +31,7 @@ export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-md">
         {!wantsAccount ? (
           <>
             <h2 className="mb-2 font-serif text-xl text-paper">

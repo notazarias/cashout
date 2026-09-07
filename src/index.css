@@ -17,6 +17,12 @@
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Must be declared in rem to match Tailwind's built-in scale (40rem–96rem). Declared in px they
+     sort ahead of every default breakpoint in the generated CSS, so `2xl:` would silently override
+     these wider ones instead of the other way round. 112.5rem = 1800px, 137.5rem = 2200px. */
+  --breakpoint-3xl: 112.5rem;
+  --breakpoint-4xl: 137.5rem;
 }
 
 :root {
