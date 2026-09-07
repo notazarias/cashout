@@ -1,0 +1,66 @@
+name: Keep Supabase Awake
+
+# Supabase's free tier pauses a project after ~7 days without activity, which takes down auth and the
+# database together. This repo goes quiet between build sessions, so a daily heartbeat keeps the
+# inactivity timer from ever running out (daily rather than every 2-3 days purely for buffer — a
+# single skipped run then can't get anywhere near the 7-day threshold).
+#
+# NOTE: GitHub disables scheduled workflows in a repository with no activity for 60 days. If this repo
+# goes fully untouched that long, re-enable the schedule from the Actions tab (or push any commit),
+# otherwise the heartbeat stops and the project will pause again.
+
+on:
+  schedule:
+    # 09:17 UTC daily. Off-the-hour on purpose: GitHub delays scheduled jobs that pile up on :00.
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Ping Supabase
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database via PostgREST
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+            echo "::error::SUPABASE_URL and/or SUPABASE_ANON_KEY repository secrets are not set."
+            exit 1
+          fi
+
+          # Hits /rest/v1 rather than the project root: this goes through PostgREST and executes a real
+          # SELECT against Postgres, which is what the inactivity timer actually tracks. A plain request
+          # to the project URL only touches the edge and may not register as database activity.
+          #
+          # `profiles` is the ping target because its RLS is a plain `auth.uid() = id` check — with no
+          # anon session it returns an empty array, exposing nothing, and it has no policy that calls a
+          # helper function or reads another table (unlike `sessions`, whose policies call
+          # `my_table_ids()`, which the anon role deliberately cannot execute).
+          HTTP_STATUS=$(curl -sS --max-time 30 \
+            -o response.json \
+            -w '%{http_code}' \
+            "${SUPABASE_URL}/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+
+          echo "HTTP status: ${HTTP_STATUS}"
+          echo "Response body: $(cat response.json)"
+
+          if [ "${HTTP_STATUS}" != "200" ]; then
+            echo "::error::Supabase ping failed with HTTP ${HTTP_STATUS}. The project may be paused or the key may be invalid."
+            exit 1
+          fi
+
+          # A paused/erroring project can still return a 200 with a JSON error object, so confirm the
+          # body is actually a result set (a JSON array) — that only comes back if the query really ran.
+          if ! jq -e 'type == "array"' response.json > /dev/null; then
+            echo "::error::Supabase returned HTTP 200 but not a result set — the query did not run."
+            exit 1
+          fi
+
+          echo "Supabase ping succeeded — database query executed."
