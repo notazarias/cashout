@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { fromRow, type SessionRow } from '@/lib/dataAdapter/sessionRow'
 import { DuplicateOpenSessionError, type OpenSession } from '@/lib/dataAdapter/types'
+import { generateJoinCode, MAX_CODE_ATTEMPTS } from '@/lib/joinCode'
 import { supabase } from '@/lib/supabaseClient'
 import {
   DuplicateOpenTableError,
@@ -9,10 +10,6 @@ import {
   type Table,
   type TableRosterEntry,
 } from './types'
-
-const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // no O/0/I/1
-const CODE_LENGTH = 6
-const MAX_CODE_ATTEMPTS = 5
 
 interface TableRow {
   id: string
@@ -24,19 +21,12 @@ interface TableRow {
   status: 'open' | 'closed'
   created_at: string
   closed_at: string | null
+  club_id: string | null
 }
 
 interface RosterSessionRow extends SessionRow {
   player_email: string | null
   player_display_name: string | null
-}
-
-function generateTableCode(): string {
-  let code = ''
-  for (let i = 0; i < CODE_LENGTH; i++) {
-    code += CODE_ALPHABET[Math.floor(Math.random() * CODE_ALPHABET.length)]
-  }
-  return code
 }
 
 function fromTableRow(row: TableRow): Table {
@@ -50,6 +40,7 @@ function fromTableRow(row: TableRow): Table {
     status: row.status,
     createdAt: row.created_at,
     closedAt: row.closed_at,
+    clubId: row.club_id,
   }
 }
 
@@ -59,11 +50,12 @@ export async function createTable(hostId: string, input: HostTableInput): Promis
       .from('tables')
       .insert({
         host_id: hostId,
-        code: generateTableCode(),
+        code: generateJoinCode(),
         buy_in_cents: input.buyInCents,
         location_label: input.locationLabel ?? null,
         max_players: input.maxPlayers ?? null,
         status: 'open',
+        club_id: input.clubId ?? null,
       })
       .select('*')
       .single()
@@ -131,6 +123,34 @@ export async function closeTable(tableId: string): Promise<Table> {
   const { data, error } = await supabase.rpc('close_table', { p_table_id: tableId })
   if (error) throw new Error(error.message)
   return fromTableRow(data as TableRow)
+}
+
+/** The club's currently-running table, if any. Visible to every club member via
+ * tables_select_club_member, which is what lets a member join without ever typing a code. */
+export async function getClubOpenTable(clubId: string): Promise<Table | null> {
+  const { data, error } = await supabase
+    .from('tables')
+    .select('*')
+    .eq('club_id', clubId)
+    .eq('status', 'open')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (error) throw error
+  return data ? fromTableRow(data as TableRow) : null
+}
+
+/** Every open club table the caller can see. One query does it: tables_select_club_member already
+ * scopes this to the caller's own clubs server-side, so there's no need to fan out per club. */
+export async function listOpenClubTables(): Promise<Table[]> {
+  const { data, error } = await supabase
+    .from('tables')
+    .select('*')
+    .eq('status', 'open')
+    .not('club_id', 'is', null)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return (data as TableRow[]).map(fromTableRow)
 }
 
 /** Most recently closed table this host has that either has no settlement yet, or has one with an

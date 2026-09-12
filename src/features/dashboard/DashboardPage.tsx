@@ -4,6 +4,7 @@ import { Money } from '@/components/ui/Mono'
 import { ActiveSessionBanner } from '@/features/sessions/components/ActiveSessionBanner'
 import { SessionHistoryList } from '@/features/sessions/components/SessionHistoryList'
 import { useSessions } from '@/features/sessions/useSessions'
+import { ClubOpenTablesBanner } from '@/features/clubs/components/ClubOpenTablesBanner'
 import { GuestTableSessionBanner } from '@/features/tables/components/GuestTableSessionBanner'
 import { HostedTableBanner } from '@/features/tables/components/HostedTableBanner'
 import { TableEntryPoints } from '@/features/tables/components/TableEntryPoints'
@@ -59,6 +60,7 @@ export function DashboardPage() {
       />
 
       <HostedTableBanner />
+      {!openSession && <ClubOpenTablesBanner />}
       <TableSettlementBanner />
       <GuestTableSessionBanner />
 

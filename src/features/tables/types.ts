@@ -12,12 +12,14 @@ export interface Table {
   status: TableStatus
   createdAt: string
   closedAt: string | null
+  clubId: string | null
 }
 
 export interface HostTableInput {
   locationLabel?: string
   buyInCents: number
   maxPlayers?: number
+  clubId?: string
 }
 
 export interface JoinTableInput {

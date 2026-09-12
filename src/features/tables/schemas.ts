@@ -10,6 +10,8 @@ export const hostTableSchema = z.object({
   locationLabel: locationFieldSchema,
   buyIn: moneyFieldSchema,
   maxPlayers: maxPlayersFieldSchema,
+  /** '' is the "One-off table (no club)" option — normalized to undefined at submit. */
+  clubId: z.string().optional(),
 })
 
 export const codeFieldSchema = z

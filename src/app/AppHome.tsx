@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { useAuthContext } from '@/features/auth/authContext'
 import { GuestConversionPrompt } from '@/features/auth/components/GuestConversionPrompt'
 import { hasGuestData } from '@/features/auth/guestSession'
@@ -39,6 +39,11 @@ export function AppHome() {
         <header className="mb-8 flex items-center justify-between">
           <h1 className="font-serif text-4xl text-paper">CashOut</h1>
           <div className="flex items-center gap-4 font-sans text-base text-paper/60">
+            {!isGuest && (
+              <Link to="/app/clubs" className="text-paper/60 hover:text-paper">
+                Clubs
+              </Link>
+            )}
             <span className="font-mono text-paper">
               {auth.status === 'account' ? auth.user.email : `guest-${auth.guestId.slice(0, 8)}`}
             </span>
