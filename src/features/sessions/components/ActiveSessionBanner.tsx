@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import type { OpenSession, StartSessionInput } from '@/lib/dataAdapter/types'
 import { StartSessionForm } from './StartSessionForm'
 
@@ -22,7 +23,7 @@ export function ActiveSessionBanner({
           <Button onClick={() => setShowStart(true)}>Start Session</Button>
         </Card>
         {showStart && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+          <ModalOverlay>
             <Card className="w-full max-w-sm">
               <h2 className="mb-4 font-serif text-xl text-paper">Start a Session</h2>
               <StartSessionForm
@@ -33,7 +34,7 @@ export function ActiveSessionBanner({
                 onCancel={() => setShowStart(false)}
               />
             </Card>
-          </div>
+          </ModalOverlay>
         )}
       </>
     )

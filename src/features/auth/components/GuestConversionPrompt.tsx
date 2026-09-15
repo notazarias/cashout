@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { useGuestTableSession } from '@/features/tables/useGuestTableSession'
 import { useAuthContext } from '../authContext'
 import { EmailPasswordForm } from './EmailPasswordForm'
@@ -30,7 +31,7 @@ export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+    <ModalOverlay>
       <Card className="w-full max-w-md">
         {!wantsAccount ? (
           <>
@@ -60,6 +61,6 @@ export function GuestConversionPrompt({ onDecline }: { onDecline: () => void }) 
           </>
         )}
       </Card>
-    </div>
+    </ModalOverlay>
   )
 }

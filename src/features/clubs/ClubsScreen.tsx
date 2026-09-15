@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Mono } from '@/components/ui/Mono'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { PageShell } from '@/components/ui/PageShell'
 import { useAuth } from '@/features/auth/authContext'
 import { createClub, joinClub } from './clubsApi'
@@ -85,7 +86,7 @@ export function ClubsScreen() {
       </Link>
 
       {showCreate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-md">
             <h2 className="mb-4 font-serif text-xl text-paper">Create a Club</h2>
             <CreateClubForm
@@ -106,11 +107,11 @@ export function ClubsScreen() {
             />
             {error && <p className="mt-2 font-sans text-sm text-loss">{error}</p>}
           </Card>
-        </div>
+        </ModalOverlay>
       )}
 
       {showJoin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-md">
             <h2 className="mb-4 font-serif text-xl text-paper">Join a Club</h2>
             <JoinClubForm
@@ -131,7 +132,7 @@ export function ClubsScreen() {
             />
             {error && <p className="mt-2 font-sans text-sm text-loss">{error}</p>}
           </Card>
-        </div>
+        </ModalOverlay>
       )}
     </PageShell>
   )

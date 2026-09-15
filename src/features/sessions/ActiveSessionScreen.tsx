@@ -4,6 +4,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Money, Mono } from '@/components/ui/Mono'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { PageShell } from '@/components/ui/PageShell'
 import { derivedDurationMinutes, netCents } from '@/features/dashboard/stats'
 import { TableLiveStatusSection } from '@/features/tables/components/TableLiveStatusSection'
@@ -176,7 +177,7 @@ export function ActiveSessionScreen({
       </Card>
 
       {showAddChips && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-sm">
             <h2 className="mb-4 font-serif text-xl text-paper">Add Chips</h2>
             <AddBuyInForm
@@ -191,11 +192,11 @@ export function ActiveSessionScreen({
               Cancel
             </Button>
           </Card>
-        </div>
+        </ModalOverlay>
       )}
 
       {showClose && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-sm">
             <h2 className="mb-4 font-serif text-xl text-paper">Cash Out</h2>
             <CloseSessionForm
@@ -210,7 +211,7 @@ export function ActiveSessionScreen({
               onCancel={() => setShowClose(false)}
             />
           </Card>
-        </div>
+        </ModalOverlay>
       )}
     </PageShell>
   )

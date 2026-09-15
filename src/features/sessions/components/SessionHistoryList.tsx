@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import type { ClosedSession, LogCompletedSessionInput } from '@/lib/dataAdapter/types'
 import { SessionForm } from './SessionForm'
 import { SessionTicketCard } from './SessionTicketCard'
@@ -53,12 +54,12 @@ export function SessionHistoryList({
       )}
 
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-sm">
             <h2 className="mb-4 font-serif text-xl text-paper">Log a Past Session</h2>
             <SessionForm onSubmit={handleSubmit} onCancel={() => setModalOpen(false)} />
           </Card>
-        </div>
+        </ModalOverlay>
       )}
     </div>
   )

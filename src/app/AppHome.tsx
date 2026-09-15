@@ -36,18 +36,18 @@ export function AppHome() {
   return (
     <div className="min-h-screen bg-ink px-6 py-8 lg:px-12 xl:px-16">
       <div className="mx-auto max-w-[1920px]">
-        <header className="mb-8 flex items-center justify-between">
+        <header className="mb-8 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <h1 className="font-serif text-4xl text-paper">CashOut</h1>
-          <div className="flex items-center gap-4 font-sans text-base text-paper/60">
+          <div className="flex min-w-0 items-center gap-3 font-sans text-sm text-paper/60 sm:gap-4 sm:text-base">
             {!isGuest && (
-              <Link to="/app/clubs" className="text-paper/60 hover:text-paper">
+              <Link to="/app/clubs" className="shrink-0 text-paper/60 hover:text-paper">
                 Clubs
               </Link>
             )}
-            <span className="font-mono text-paper">
+            <span className="min-w-0 truncate font-mono text-paper">
               {auth.status === 'account' ? auth.user.email : `guest-${auth.guestId.slice(0, 8)}`}
             </span>
-            <button onClick={handleLogoutClick} className="text-paper/60 hover:text-paper">
+            <button onClick={handleLogoutClick} className="shrink-0 text-paper/60 hover:text-paper">
               Log Out
             </button>
           </div>

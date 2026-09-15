@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
+import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { useAuth } from '@/features/auth/authContext'
 import { anonSupabase } from '@/lib/anonSupabaseClient'
 import { ensureGuestTableIdentity } from '../guestTableAuth'
@@ -54,7 +55,7 @@ export function TableEntryPoints() {
         </Button>
 
         {showJoin && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+          <ModalOverlay>
             <Card className="w-full max-w-md">
               <h2 className="mb-4 font-serif text-xl text-paper">Join a Table</h2>
               <JoinTableForm
@@ -73,7 +74,7 @@ export function TableEntryPoints() {
               />
               {error && <p className="mt-2 text-sm text-loss">{error}</p>}
             </Card>
-          </div>
+          </ModalOverlay>
         )}
       </Card>
     )
@@ -92,7 +93,7 @@ export function TableEntryPoints() {
       </div>
 
       {showHost && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-sm">
             <h2 className="mb-4 font-serif text-xl text-paper">Host a Table</h2>
             <HostTableForm
@@ -116,11 +117,11 @@ export function TableEntryPoints() {
             />
             {error && <p className="mt-2 text-sm text-loss">{error}</p>}
           </Card>
-        </div>
+        </ModalOverlay>
       )}
 
       {showJoin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/80 px-4">
+        <ModalOverlay>
           <Card className="w-full max-w-sm">
             <h2 className="mb-4 font-serif text-xl text-paper">Join a Table</h2>
             <JoinTableForm
@@ -138,7 +139,7 @@ export function TableEntryPoints() {
             />
             {error && <p className="mt-2 text-sm text-loss">{error}</p>}
           </Card>
-        </div>
+        </ModalOverlay>
       )}
     </Card>
   )
