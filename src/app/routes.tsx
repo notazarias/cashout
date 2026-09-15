@@ -3,6 +3,7 @@ import { AuthCallback } from '@/features/auth/components/AuthCallback'
 import { LoginScreen } from '@/features/auth/components/LoginScreen'
 import { RedirectIfSignedIn } from '@/features/auth/components/RedirectIfSignedIn'
 import { RequireSession } from '@/features/auth/components/RequireSession'
+import { ResetPasswordScreen } from '@/features/auth/components/ResetPasswordScreen'
 import { ClubDetailScreen } from '@/features/clubs/ClubDetailScreen'
 import { ClubsScreen } from '@/features/clubs/ClubsScreen'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
@@ -24,6 +25,7 @@ export function AppRoutes() {
         }
       />
       <Route path="/auth/callback" element={<AuthCallback />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordScreen />} />
       <Route
         path="/app"
         element={

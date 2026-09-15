@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { useAuthContext } from '../authContext'
+import { ForgotPasswordForm } from './ForgotPasswordForm'
 
 const schema = z.object({
   email: z.string().email('Enter a valid email'),
@@ -18,6 +19,7 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
   const [mode, setMode] = useState<'login' | 'signup'>('login')
   const [formError, setFormError] = useState<string | null>(null)
   const [checkEmail, setCheckEmail] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
 
   const {
     register,
@@ -49,6 +51,10 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
     )
   }
 
+  if (showForgotPassword) {
+    return <ForgotPasswordForm onDone={() => setShowForgotPassword(false)} />
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
       <div>
@@ -64,6 +70,15 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
         />
         {errors.password && <p className="mt-1 text-xs text-loss">{errors.password.message}</p>}
       </div>
+      {mode === 'login' && (
+        <button
+          type="button"
+          onClick={() => setShowForgotPassword(true)}
+          className="-mt-1 self-end font-sans text-xs text-paper/60 hover:text-paper"
+        >
+          Forgot password?
+        </button>
+      )}
       {formError && <p className="text-sm text-loss">{formError}</p>}
       <Button type="submit" disabled={isSubmitting}>
         {mode === 'login' ? 'Log In' : 'Create Account'}
