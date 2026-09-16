@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { reportError } from '@/lib/sentry'
 import { closeTable } from '../tablesApi'
 import type { Table, TableRosterEntry } from '../types'
 import { TableRosterCard } from './TableRosterCard'
@@ -31,6 +32,7 @@ export function TableClosingPanel({
       onTableUpdate(await closeTable(table.id))
     } catch (err) {
       setCloseError(err instanceof Error ? err.message : 'Could not close the table.')
+      reportError(err, 'close table')
     } finally {
       setClosing(false)
     }

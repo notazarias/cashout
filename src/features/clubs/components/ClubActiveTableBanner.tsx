@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { Mono } from '@/components/ui/Mono'
 import { joinTable } from '@/features/tables/tablesApi'
 import type { Table } from '@/features/tables/types'
+import { reportError } from '@/lib/sentry'
 
 /** The payoff of attaching club_id: a member joins their club's running table with one click and
  * never types a code. It's the same join_table RPC the code-entry path uses — the code is just
@@ -27,6 +28,7 @@ export function ClubActiveTableBanner({ table, clubName }: { table: Table; clubN
       navigate(`/app/session/${session.id}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not join that table.')
+      reportError(err, 'join club table')
       setJoining(false)
     }
   }

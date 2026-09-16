@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
+import { reportError } from '@/lib/sentry'
 import { useAuthContext } from '../authContext'
 
 export function GoogleOAuthButton({ migrateGuestData = false }: { migrateGuestData?: boolean }) {
@@ -15,6 +16,7 @@ export function GoogleOAuthButton({ migrateGuestData = false }: { migrateGuestDa
       // Supabase redirects to Google; execution effectively ends here.
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not start Google sign-in.')
+      reportError(err, 'sign in with Google')
       setLoading(false)
     }
   }

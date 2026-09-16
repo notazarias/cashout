@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDataAdapter } from '@/lib/dataAdapter'
+import { reportError } from '@/lib/sentry'
 import {
   DuplicateOpenSessionError,
   isClosedSession,
@@ -25,6 +26,7 @@ export function useSessions(overrideAdapter?: DataAdapter) {
       setSessions(await adapter.listSessions())
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load sessions.')
+      reportError(err, 'load sessions')
     } finally {
       setLoading(false)
     }

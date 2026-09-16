@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { reportError } from '@/lib/sentry'
 import { useAuthContext } from '../authContext'
 
 const schema = z.object({ email: z.string().email('Enter a valid email') })
@@ -27,6 +28,7 @@ export function ForgotPasswordForm({ onDone }: { onDone: () => void }) {
       setSent(true)
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Something went wrong.')
+      reportError(err, 'request password reset')
     }
   }
 

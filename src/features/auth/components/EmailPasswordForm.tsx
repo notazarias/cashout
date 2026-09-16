@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { reportError } from '@/lib/sentry'
 import { useAuthContext } from '../authContext'
 import { ForgotPasswordForm } from './ForgotPasswordForm'
 
@@ -40,6 +41,7 @@ export function EmailPasswordForm({ migrateGuestData = false }: { migrateGuestDa
       }
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'Something went wrong.')
+      reportError(err, mode === 'login' ? 'sign in with password' : 'sign up with password')
     }
   }
 

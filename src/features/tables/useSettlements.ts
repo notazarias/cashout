@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import { reportError } from '@/lib/sentry'
 import { listSettlements } from './settlementsApi'
 import type { Settlement } from './types'
 
@@ -20,6 +21,7 @@ export function useSettlements(tableId: string | null, client: SupabaseClient = 
       setSettlements(await listSettlements(tableId, client))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load settlement.')
+      reportError(err, 'load settlements')
     } finally {
       setLoading(false)
     }

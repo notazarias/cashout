@@ -6,6 +6,7 @@ import { Mono } from '@/components/ui/Mono'
 import { PageShell } from '@/components/ui/PageShell'
 import { useAuth } from '@/features/auth/authContext'
 import { anonSupabase } from '@/lib/anonSupabaseClient'
+import { reportError } from '@/lib/sentry'
 import { supabase } from '@/lib/supabaseClient'
 import { listSettlements, markSettlementPaid } from './settlementsApi'
 import type { Settlement } from './types'
@@ -55,6 +56,7 @@ export function TableSettlementScreen() {
       setSettlements(await listSettlements(tableId, client))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load settlement.')
+      reportError(err, 'load settlement')
     } finally {
       setLoading(false)
     }
@@ -71,6 +73,7 @@ export function TableSettlementScreen() {
       await refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not update that payment.')
+      reportError(err, 'mark settlement paid')
     } finally {
       setMarkingId(null)
     }

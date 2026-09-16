@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/Card'
 import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { useAuth } from '@/features/auth/authContext'
 import { anonSupabase } from '@/lib/anonSupabaseClient'
+import { reportError } from '@/lib/sentry'
 import { ensureGuestTableIdentity } from '../guestTableAuth'
 import { createTable, joinTable } from '../tablesApi'
 import { useGuestTableSession } from '../useGuestTableSession'
@@ -68,6 +69,7 @@ export function TableEntryPoints() {
                     navigate(`/app/table-session/${session.id}`)
                   } catch (err) {
                     setError(err instanceof Error ? err.message : 'Could not join that table.')
+                    reportError(err, 'guest join table')
                   }
                 }}
                 onCancel={() => setShowJoin(false)}
@@ -111,6 +113,7 @@ export function TableEntryPoints() {
                   navigate(`/app/session/${session.id}`)
                 } catch (err) {
                   setError(err instanceof Error ? err.message : 'Could not host a table.')
+                  reportError(err, 'host table')
                 }
               }}
               onCancel={() => setShowHost(false)}
@@ -133,6 +136,7 @@ export function TableEntryPoints() {
                   navigate(`/app/session/${session.id}`)
                 } catch (err) {
                   setError(err instanceof Error ? err.message : 'Could not join that table.')
+                  reportError(err, 'join table')
                 }
               }}
               onCancel={() => setShowJoin(false)}

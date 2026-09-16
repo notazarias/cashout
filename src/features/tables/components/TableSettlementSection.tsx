@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Mono } from '@/components/ui/Mono'
 import { netCents } from '@/features/dashboard/stats'
+import { reportError } from '@/lib/sentry'
 import type { ClosedSession } from '@/lib/dataAdapter/types'
 import { computeDirectSettlement, computeHostSettlement, totalImbalanceCents, type PlayerNet } from '../settlement'
 import { generateSettlement, markSettlementPaid } from '../settlementsApi'
@@ -50,6 +51,7 @@ export function TableSettlementSection({ table, roster }: { table: Table; roster
       setPickingMode(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not generate a settlement.')
+      reportError(err, 'generate settlement')
     } finally {
       setGenerating(false)
     }
@@ -62,6 +64,7 @@ export function TableSettlementSection({ table, roster }: { table: Table; roster
       await refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not update that payment.')
+      reportError(err, 'mark settlement paid')
     } finally {
       setMarkingId(null)
     }

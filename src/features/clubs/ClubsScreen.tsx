@@ -6,6 +6,7 @@ import { Mono } from '@/components/ui/Mono'
 import { ModalOverlay } from '@/components/ui/ModalOverlay'
 import { PageShell } from '@/components/ui/PageShell'
 import { useAuth } from '@/features/auth/authContext'
+import { reportError } from '@/lib/sentry'
 import { createClub, joinClub } from './clubsApi'
 import { CreateClubForm } from './components/CreateClubForm'
 import { JoinClubForm } from './components/JoinClubForm'
@@ -98,6 +99,7 @@ export function ClubsScreen() {
                   await refresh()
                 } catch (err) {
                   setError(err instanceof Error ? err.message : 'Could not create that club.')
+                  reportError(err, 'create club')
                 }
               }}
               onCancel={() => {
@@ -123,6 +125,7 @@ export function ClubsScreen() {
                   await refresh()
                 } catch (err) {
                   setError(err instanceof Error ? err.message : 'Could not join that club.')
+                  reportError(err, 'join club')
                 }
               }}
               onCancel={() => {

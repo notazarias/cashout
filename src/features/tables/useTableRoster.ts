@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
+import { reportError } from '@/lib/sentry'
 import { listTableRoster } from './tablesApi'
 import type { TableRosterEntry } from './types'
 
@@ -20,6 +21,7 @@ export function useTableRoster(tableId: string | null, client: SupabaseClient = 
       setEntries(await listTableRoster(tableId, client))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load roster.')
+      reportError(err, 'load table roster')
     } finally {
       setLoading(false)
     }
