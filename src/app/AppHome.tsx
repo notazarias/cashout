@@ -68,6 +68,12 @@ export function AppHome() {
         )}
 
         <Outlet />
+
+        <footer className="mt-12 border-t border-paper/10 pt-6">
+          <Link to="/privacy" className="font-sans text-xs text-paper/40 hover:text-paper/60">
+            Privacy
+          </Link>
+        </footer>
       </div>
 
       {showConversionPrompt && (

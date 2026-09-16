@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Money, Mono } from '@/components/ui/Mono'
@@ -149,6 +150,13 @@ export function LoginScreen() {
             <Button variant="ghost" className="mt-4 w-full 2xl:mt-6 3xl:mt-8" onClick={continueAsGuest}>
               Continue as Guest
             </Button>
+
+            <Link
+              to="/privacy"
+              className="mt-6 block text-center font-sans text-xs text-paper/40 hover:text-paper/60"
+            >
+              Privacy
+            </Link>
           </div>
         </div>
       </div>
