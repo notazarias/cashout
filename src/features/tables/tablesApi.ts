@@ -72,6 +72,14 @@ export async function createTable(hostId: string, input: HostTableInput): Promis
 }
 
 export async function joinTable(input: JoinTableInput, client: SupabaseClient = supabase): Promise<OpenSession> {
+  // Two separate RPC calls, deliberately — PostgREST commits one transaction per call, so if this
+  // were folded into join_table itself, a later failure there (bad code, full table) would roll
+  // back the attempt-counter insert along with it, silently defeating the rate limit against
+  // exactly the case it exists for (repeated wrong-code guesses). See migration
+  // fix_join_attempt_recording_across_transactions.
+  const { error: attemptError } = await client.rpc('record_join_attempt')
+  if (attemptError) throw new Error(attemptError.message)
+
   const { data, error } = await client.rpc('join_table', {
     p_code: input.code,
     p_date: input.date,
